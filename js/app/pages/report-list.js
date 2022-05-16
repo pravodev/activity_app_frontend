@@ -66,6 +66,10 @@ class ReportListView {
         loadingHelper.toggleLoading(false);
         $(".report-summary-activity").show();
         $('.content-container').show();
+
+        
+        const focusData = result.response.focusData;
+        this.showFocusData(focusData);
       }
     }
 
@@ -112,10 +116,6 @@ class ReportListView {
             endDate,
             trigger: '.datepicker-trigger',
           };
-          console.log("🚀 ~ file: report-list.js ~ line 106 ~ ReportListView ~ fetchHistoryRange ~ optionsMonthPicker", {
-            optionsMonthPicker,
-            ranges,
-          })
           $('#monthPicker').datepicker(optionsMonthPicker)
         }
       }
@@ -250,6 +250,39 @@ class ReportListView {
     if(Number(window.setting.point_system)) {
       $('.section-point-menu').show();
     }
+  }
+
+  showFocusData(activities) {
+    const tbodyClassName = '.data-activity-pointFocus-summary';
+    //show report summary activity and hide report detail activity
+    $(".report-focus-activity").show();
+
+    //clear histories
+    $(`.report-focus-activity ${tbodyClassName}`).empty();
+
+    //prepare template
+    var rowFocusSummaryTpl = $(
+      'script[data-template="row-focus-activity"'
+    ).text();
+
+    //render html
+    $(`.report-focus-activity ${tbodyClassName}`).append(activities.map(function(activity) {
+        // var redScore = activity["score"] < activity["target"];
+        let title = activity["activity_title"];
+        if(activity.type == 'speedrun') {
+          title += '<br/>' + activity.activity_value;
+        }
+        return templateHelper.render(rowFocusSummaryTpl, {
+            "activity_id" : activity["activity_id"],
+            "activity_name" : title,
+            "start_date": activity['start_date'],
+            "end_date": activity['end_date'],
+            "repeated_days_count": activity['repeated_days_count'],
+            "point": activity['point']
+        });
+      })
+
+    );
   }
 
   handleClickActivityTitle(evt) {

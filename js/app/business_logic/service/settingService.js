@@ -5,11 +5,11 @@ class SettingService extends BusinessService {
     super(dataProxy);
   }
 
-  saveCommand(key, value) {
+  saveCommand(key, value, data = null) {
     const dataProxy = this.dataProxy;
     return new Command({
       _onValidationSuccess() {
-        return dataProxy.save(key, value);
+        return dataProxy.save(key, value, data);
       }
     })
   }

@@ -40,6 +40,10 @@ class SettingView {
         $("#toggleBeepSound").prop("checked", setting.beep_sound == 1);
         $("#togglePointSystem").prop("checked", setting.point_system == 1);
         $("#toggleParentalInspection").prop("checked", setting.parental_inspection == 1);
+
+        Object.keys(setting.point_focus).forEach((idx) => {
+          $(`input[name='day[${idx}]']`).val(setting.point_focus[idx])
+        })
       }
     }
   }
@@ -309,7 +313,37 @@ class SettingView {
       const { message } = result.response;
       alertHelper.showSnackBar(`Successfully: ${message}`, 1);
     }
+  }
 
+  async handleClickSavePointFocus(evt) {
+    const button = $(evt);
+    console.log("🚀 ~ file: setting.js ~ line 320 ~ SettingView ~ handleClickSavePointFocus ~ button", button)
+    button.prop('disabled', true).html('<i class="fa fa-spin fa-spinner"></i> Save Changes');
+
+    const value = $('.input-point-focus').map((idx, el) => $(el).val()).toArray();
+    const data = {};
+
+    for (let index = 1; index <= value.length; index++) {
+      data[index] = value[index-1];
+    }
+    
+    console.log("🚀 ~ file: setting.js ~ line 327 ~ SettingView ~ handleClickSavePointFocus ~ data", data)
+    const command = await this.settingService.saveCommand('point_focus', null, data).execute();
+    console.log("🚀 ~ file: setting.js ~ line 332 ~ SettingView ~ handleClickSavePointFocus ~ command", command)
+    button.prop('disabled', false).html('Save Changes');
+
+    if (command.success) {
+      const result = command.value;
+
+      if (result.success) {
+        alertHelper.showSnackBar("Successfully saved !", 1);
+      }
+
+      const localSetting = window.setting;
+      localSetting.point_focus = data;
+      this.updateLocalSetting(localSetting);
+    }
+    
   }
   
   initialize() {
@@ -350,6 +384,10 @@ class SettingView {
 
     $('body').on('click', '#btnImportActivities', (evt) => {
       this.handleClickImportActivities(evt.target);
+    })
+
+    $('body').on('click', '#btnSavePointFocus', (evt) => {
+      this.handleClickSavePointFocus();
     })
   }
 }

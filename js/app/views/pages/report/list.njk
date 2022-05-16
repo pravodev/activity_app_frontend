@@ -90,6 +90,26 @@
         </div>
     </div>
 
+    <div class="report-focus-activity" style="display:none"> 
+        <div class="table-responsive mt-4">
+            <h4 class="mb-2">Focus Report</h4>
+            <table class="table table-bordered data-table" id="dataTable3" data-paging="true" data-paging-size="10" data-paging-position="center" data-filtering="true" data-sorting="true">
+                <thead>
+                    <tr>
+                        <th>Activity</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Repeat Day</th>
+                        <th>Point Earned</th>
+                    </tr>
+                </thead>
+                <tbody class="data-activity-pointFocus-summary">
+                    <!-- template row activity summary -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- report detail activity section -->
     <!-- this report detail show after user click one of activity on summary -->
     <div class="report-detail-activity" style="display:none">
@@ -132,6 +152,17 @@
         <td class='red-score-${redscore}'>${score}</td>
         <td class='red-score-${redcount}'>${count}</td>
         <td class='section-point-menu' style="display:none">${point}</td>
+    </tr>
+</script>
+<script type="text/template" data-template="row-focus-activity">
+    <tr>
+        <td>
+            ${activity_name}
+        </td>
+        <td>${start_date}</td>
+        <td>${end_date}</td>
+        <td>${repeated_days_count}</td>
+        <td>${point}</td>
     </tr>
 </script>
 

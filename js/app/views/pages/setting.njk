@@ -44,6 +44,26 @@
     <hr/>
 </div>
 
+<div class="mt-5">
+    <h3>Configure FOCUS Point</h3>
+    <div class="row">
+        <div class="col-lg-6 col-sm-12">
+            {% for i in range(0, 10) -%}
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label class="label-form" for="title">Day {{ i+1 }}</label>
+                <input type="number" name="day[{{ i+1 }}]" class="form-control input-point-focus" placeholder="">
+            </div>
+            {%- endfor %}
+            <p class="mt-3"><i class="fas fa-info-circle mr-2"></i>More then 10 days will be using the day 10th point award</p>
+            <button id="btnSavePointFocus" class="btn btn-primary mt-2">
+                Save Changes
+            </button>
+        </div>
+    </div>
+    <hr/>
+</div>
+
+
 <div class="form-wrapper mt-5">
     <h3 class="mb-2">Add Application Log</h3>
     <div id="application_log_form" class="form">
