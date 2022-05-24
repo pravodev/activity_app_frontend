@@ -154,7 +154,6 @@ export default class MediaGalleryComponent {
   }
   
   handleChangeType(evt) {
-    console.log('triggered');
     const el = evt.target;
     const value = $(el).val();
     const wrapper = $(el).closest('.form-media-wrapper');
@@ -163,7 +162,6 @@ export default class MediaGalleryComponent {
       wrapper.find('.youtube-link-input').show();
       wrapper.find('.media-input-dropzone').hide();
     } else {
-      console.log('video');
       wrapper.find('.file-media').show();
       wrapper.find('.youtube-link-input').hide();
       wrapper.find('.media-input-dropzone').show();
@@ -226,7 +224,11 @@ export default class MediaGalleryComponent {
     let imageSource = "";
 
     if(attributes.type == 'youtube') {
-      const youtubeId = attributes.value.substr(attributes.value.indexOf('?v=')+3)
+      const url = new URL(attributes.value);
+      let youtubeId = attributes.value.substr(attributes.value.indexOf('?v=')+3)
+      if(url.host === 'youtu.be') {
+        youtubeId = url.pathname.replace('/', '')
+      }
       imageSource = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
     } else if(attributes.type == 'image'){
       if(attributes.file) {
@@ -490,11 +492,11 @@ export default class MediaGalleryComponent {
     }
 
     const player = videojs(videoIdEl, options, function() {
-        // print version information at startup
-        var msg = 'Using video.js ' + videojs.VERSION +
-            ' with videojs-record ' + videojs.getPluginVersion('record') +
-            ' and recordrtc ' + RecordRTC.version;
-        videojs.log(msg);
+      // print version information at startup
+      const msg = 'Using video.js ' + videojs.VERSION +
+          ' with videojs-record ' + videojs.getPluginVersion('record') +
+          ' and recordrtc ' + RecordRTC.version;
+      videojs.log(msg);
     });
     
     // error handling
@@ -518,8 +520,55 @@ export default class MediaGalleryComponent {
         // console.log('finished recording: ', player.recordedData);
     });
 
-    window[playerName] = player;
+    player.on('deviceReady', function() {
+      player.record().enumerateDevices();
+    });
 
+
+    const container = $(`#${videoIdEl}`).closest('.player-container')
+    window[playerName] = player;
+    
+    player.on('enumerateReady', function() {
+      const devices = player.record().devices;
+  
+      const videoDevices = devices.filter(device => device.kind === 'videoinput');
+  
+      if(videoDevices.length > 1) {
+        const options = videoDevices.map(data => `<option value="${data.deviceId}">${data.label}</option>`).join('');
+  
+        container.find('.camera-device-container').show();
+        if(container.find('.camera-device-container').find('select').find('option').length <= 0) {
+            container.find('.camera-device-container').find('select').html(options);
+            container.find('.camera-device-container').find('select').off().on('change', function(event) {
+              var label = event.target.options[event.target.selectedIndex].text;
+              const deviceId = event.target.value;
+          
+              try {
+                  // change video input device
+                  // if(type == 'image') {
+                    window.photoRecordPlayer.record().recordImage = {deviceId: {exact: deviceId}}
+                    window.photoRecordPlayer.record().stopDevice();
+                    window.photoRecordPlayer.record().getDevice();
+                  // } else {
+                    window.videoRecordPlayer.record().setVideoInput(deviceId);
+                  // }
+                  $('.select-devices').prop('selectedIndex', event.target.selectedIndex)
+          
+                  console.log("Changed video input to '" + label + "' (deviceId: " +
+                      deviceId + ")");
+              } catch (error) {
+                  console.warn(error);
+          
+                  // jump back to first output device in the list as it's the default
+                  event.target.selectedIndex = 0;
+              }
+            })
+        }
+      } else {
+        container.find('.camera-device-container').find('select').html('');
+        container.find('.camera-device-container').hide();
+      }
+    });
   }
   
   initiate() {
@@ -627,7 +676,6 @@ export default class MediaGalleryComponent {
     })
 
     $('.form-media-wrapper .btn-save-camera').on('click', (evt) => {
-      console.log('save camera')
       this.handleSaveMedia(evt.target, () => {
         if($('#modalFormMediaCamera').length) {
           $('#modalFormMediaCamera').modal('hide');
@@ -692,6 +740,6 @@ export default class MediaGalleryComponent {
       thisObject.generatePreview(e.target)
       // thisObject.handleFileDropZone(container, files)
       // thisObject.generatePreview
-    })
+    })    
   }
 }

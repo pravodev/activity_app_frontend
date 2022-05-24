@@ -90,7 +90,7 @@
                                             <div class="youtube-link-input" style="display:none">
                                                 <div class="form-group youtube-link-input">
                                                     <label>Youtube Link</label>
-                                                    <input type="text" name="youtube_link" class="form-control" placeholder="https://www.youtube.com/watch?v=xxxxxxxx"/>
+                                                    <input type="text" name="youtube_link" class="form-control" placeholder="https://youtu.be/xxxxxxxxxxx"/>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Preview</label>
@@ -173,9 +173,19 @@
                                     <div class="d-flex flex-column align-items-center">
                                         <div id="photoPlayer" class="player-container">
                                             <video id="myPhoto" playsinline class="video-el video-js vjs-default-skin"></video>
+                                            <div class="camera-device-container mt-3" style="display:none"> 
+                                                Select Camera Device : <br/>
+                                                <select class="form-control select-devices" data-media="photo">
+                                                </select>
+                                            </div>
                                         </div>
                                         <div id="videoPlayer" class="player-container" style="display:none">
                                             <video id="myVideo" playsinline class="video-el video-js vjs-default-skin"></video>
+                                            <div class="camera-device-container mt-3" style="display:none">
+                                                Select Camera Device : <br/>
+                                                <select class="form-control select-devices" data-media="photo">
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="text-center mt-4">

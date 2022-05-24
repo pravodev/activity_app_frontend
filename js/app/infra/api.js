@@ -23,8 +23,8 @@ axios.interceptors.response.use((response) => response, (error) => {
     return Promise.reject(error)
   })
 // export const server = "https://backend.myrecord.club";
-export const server = "https://stagingbackend.myrecord.club";
-// export const server = "http://localhost:8000";
+// export const server = "https://stagingbackend.myrecord.club";
+export const server = "http://localhost:8000";
 
 var listApi = {
     "activity.get": {
