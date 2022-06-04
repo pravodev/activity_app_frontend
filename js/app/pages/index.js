@@ -28,7 +28,11 @@ class HomeView {
       const activitiesData = command.value;
       if (activitiesData.success) {
         this.tempData = activitiesData.response.data;
-        this.showActivitiesData(this.tempData.filter(v => !v.is_hide));
+        if($('#doneAction').data('activepage') == 'edit') {
+          this.handleClickEditButton();
+        } else {
+          this.showActivitiesData(this.tempData.filter(v => !v.is_hide));
+        }
         loadingHelper.toggleLoading(false);
       }
     }
@@ -90,9 +94,9 @@ class HomeView {
           score_target: activityData.score_target,
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
-          colorBtnHide: Number(activityData.is_hide) ? 'text-primary' : '',
+          colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
-          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye' : 'fa-eye-slash',
+          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
           order_number: activityData.position,
         };
 
@@ -131,9 +135,9 @@ class HomeView {
           score_target: activityData.score_target,
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
-          colorBtnHide: Number(activityData.is_hide) ? 'text-primary' : '',
+          colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
-          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye' : 'fa-eye-slash',
+          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
           order_number: activityData.position,
         };
 
@@ -154,9 +158,9 @@ class HomeView {
           score_target: activityData.score_target,
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
-          colorBtnHide: Number(activityData.is_hide) ? 'text-primary' : '',
+          colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
-          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye' : 'fa-eye-slash',
+          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
           order_number: activityData.position,
         };
   
@@ -182,9 +186,9 @@ class HomeView {
           score_target: activityData.score_target,
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
-          colorBtnHide: Number(activityData.is_hide) ? 'text-primary' : '',
+          colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
-          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye' : 'fa-eye-slash',
+          iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
           order_number: activityData.position,
         };
   
@@ -689,6 +693,23 @@ class HomeView {
       })
 
       const formView = new FormView();
+      formView.changeTypeListener('.form-add-activity');
+      formView.changeTypeListener('#edit_form');
+      formView.initPointSystemForm();
+
+      $('body').on('click', '.btn-delete-activity', function(evt) {
+        const activityId = $(this).closest('.modal-content').find('input[name=activity_id]').val();
+        console.log("🚀 ~ file: index.js ~ line 698 ~ HomeView ~ $ ~ $(this)", $(this))
+        console.log("🚀 ~ file: index.js ~ line 698 ~ HomeView ~ $ ~ activityId", activityId)
+        formView.handleClickDeleteButton(evt, {
+          activityId,
+          callbackSuccess: () => {
+            thisObject.fetchActivities();
+            $('#modalEdit').modal('hide');
+          }
+        });
+      })
+      
       $("body").on("click", ".btn-edit-activity", (evt) => {
         const activityId = $(evt.target).closest('.activity-edit-container').attr('activityid');
         const selected = thisObject.tempData.filter(d => d.id == activityId)[0];

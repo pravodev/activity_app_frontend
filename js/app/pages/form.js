@@ -195,12 +195,20 @@ export default class FormView {
     $('#target').prop('type', 'text');
   }
 
-  async handleClickDeleteButton(evt) {
+  async handleClickDeleteButton(evt, {activityId = null, callbackSuccess = null}) {
     // - show confirmation popup
-    var result = await alertHelper.showConfirmation(
-      "Your activity will be delete and cannot be restore"
-    );
-
+    var result = await alertHelper.showConfirmation("Your activity will be delete and cannot be restore", {
+      input: 'text',
+      inputPlaceholder: 'Type "delete" to confirm',
+      didOpen: () => {
+        $(swal.getConfirmButton()).prop('disabled', true)
+        $(swal.getInput()).on('keyup', function() {
+          if($(this).val().toLowerCase() === 'delete') {
+            $(swal.getConfirmButton()).prop('disabled', false)
+          }
+        })
+      }
+    })
     // - if user cancel delete
     if (!result.isConfirmed) return;
 
@@ -209,7 +217,10 @@ export default class FormView {
     loadingHelper.toggleLoading(true);
 
     // o get activity id
-    const activityId = $(evt).attr("activityId");
+    activityId = activityId ? activityId : $(evt).attr("activityId");
+    callbackSuccess = typeof callbackSuccess == 'function' ? callbackSuccess : () => {
+      this.fetchActivities();
+    }
 
     // o run command
     const command = await this.activityService
@@ -224,7 +235,7 @@ export default class FormView {
       const result = command.value;
       if (result.success) {
         alertHelper.showSuccess("successfully deleted !");
-        this.fetchActivities();
+        callbackSuccess();
       }
     }
   }
@@ -471,6 +482,14 @@ export default class FormView {
     // }
   // }
   
+  initPointSystemForm() {
+    $('.point-system-form input[name=bonus_value]').on('change', function(){
+      const container = $(this).closest('.point-system-form');
+      const penaltyValue = Math.floor(Number($(this).val()) / 2);
+      container.find('input[name=penalty_value]').val(penaltyValue)
+    })
+  }
+  
   initialize() {
     this.fetchActivities();
 
@@ -479,11 +498,7 @@ export default class FormView {
 
     colorHelper.initColorInput('input[type=color]')
 
-    $('.point-system-form input[name=bonus_value]').on('change', function(){
-      const container = $(this).closest('.point-system-form');
-      const penaltyValue = Math.floor(Number($(this).val()) / 2);
-      container.find('input[name=penalty_value]').val(penaltyValue)
-    })
+    this.initPointSystemForm();
     
 
     // event handler

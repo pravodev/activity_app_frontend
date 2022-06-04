@@ -19,9 +19,9 @@ export function initColorInput(input, options = {}) {
         preferredFormat: "hex",
         showPaletteOnly: true,
         palette: [
-            ['#000000', '#ea6d2c', '#0e606b', '#8239ea', '#be0002', '#583320'],
-            ['#5c667d', '#ffc300', '#299d86', '#0253a4', '#f04770', '#97582a'],
-            ['#bababa', '#fef3af', '#54a630', '#3987fd', '#f798d0', '#baa262']
+            ['#000000', '#ea6d2c', '#0e606b', '#8239ea', '#be0002', '#583320',
+            '#5c667d', '#ffc300', '#299d86', '#0253a4', '#f04770', '#97582a',
+            '#bababa', '#fef3af', '#54a630', '#3987fd', '#f798d0', '#baa262']
         ],
         ...options
     };

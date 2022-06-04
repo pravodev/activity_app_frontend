@@ -28,7 +28,7 @@ export function showWarning(text) {
     })
 }
 
-export async function showConfirmation(text) {
+export async function showConfirmation(text, options = {}) {
     return Swal.fire({
         title: 'Are you sure?',
         text: text,
@@ -39,5 +39,6 @@ export async function showConfirmation(text) {
         confirmButtonText: 'Delete',
         dangerMode: true,
         reverseButtons: true,
+        ...options,
     });
 }

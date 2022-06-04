@@ -250,7 +250,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEdit" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -266,8 +266,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="btn-update-activity" type="button" class="btn btn-primary">Save changes</button>
+                    <div class="d-flex justify-content-between w-100">
+                        <div>
+                            <button type="button" class="btn btn-danger btn-delete-activity"><i class="fa fa-trash"></i></button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="btn-update-activity" type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -415,6 +422,10 @@
     color: #4e73df;
     font-weight: 700;
     cursor: pointer;
+}
+
+#modalEditColor .sp-container {
+    border: none !important;
 }
 </style>
 <link rel="stylesheet" href="vendor/videojs/video-js.min.css">

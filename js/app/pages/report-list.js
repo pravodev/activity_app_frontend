@@ -165,6 +165,7 @@ class ReportListView {
 
     //show report detail activity and hi hide report summary activity
     $(".report-summary-activity").hide();
+    $(".report-focus-activity").hide();
     $(".report-detail-activity").show();
 
     //clear report heading, data report detail, footer report detail
@@ -239,6 +240,7 @@ class ReportListView {
       e.preventDefault();
 
       $(".report-summary-activity").show();
+      $(".report-focus-activity").show();
       $(".report-detail-activity").hide();
       $('#monthSelection').show();
 
@@ -265,6 +267,16 @@ class ReportListView {
       'script[data-template="row-focus-activity"'
     ).text();
 
+    if(!activities.length) {
+      $(`.report-focus-activity ${tbodyClassName}`).html(`
+        <tr>
+          <td colspan="5" class="text-center">No data</td>
+        </tr>
+      `)
+
+      return ;
+    }
+    
     //render html
     $(`.report-focus-activity ${tbodyClassName}`).append(activities.map(function(activity) {
         // var redScore = activity["score"] < activity["target"];
