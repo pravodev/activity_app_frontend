@@ -380,11 +380,6 @@ export default class MediaGalleryComponent {
       source: source.value_url
     }
 
-    if(source.type == 'youtube') {
-      const youtubeId = source.value_url.substr(source.value_url.indexOf('?v=')+3)
-      content.source = youtubeId;
-    }
-
     const temp = templateHelper.render(
       selectedTemplate,
       content
@@ -571,8 +566,27 @@ export default class MediaGalleryComponent {
     });
   }
   
+  initiateCategory() {
+    this.fetchCategories();
+
+    $('.form-category-wrapper .btn-save-category').on('click', (evt) => {
+      this.handleSaveCategory(evt.target, () => {
+        if($('#modalFormMedia').length) {
+          $('#modalFormMedia').modal('hide');
+
+        }
+        this.fetchCategories();
+      })
+    })
+
+    // assign event to category actions
+    $('body').on('click', '.btn-edit-category', (evt) => this.handleEditCategory(evt.target));
+    $('body').on('click', '.btn-delete-category', (evt) => this.handleDeleteCategory(evt.target));
+  }
+  
   initiate() {
     const thisObject = this;
+    thisObject.initiateCategory();
     $('.form-media-wrapper [name=type]').on('change', this.handleChangeType)
     $('.form-media-wrapper input[name=file]').on('change', (evt) => this.generatePreview(evt.target))
     $('.form-media-wrapper input[name=youtube_link]').on('keyup change', (evt) => this.generatePreview(evt.target))
@@ -582,16 +596,6 @@ export default class MediaGalleryComponent {
           $('#modalFormMedia').modal('hide');
 
           this.fetchMediaGallery();
-        }
-      })
-    })
-
-    $('.form-category-wrapper .btn-save-category').on('click', (evt) => {
-      this.handleSaveCategory(evt.target, () => {
-        if($('#modalFormMedia').length) {
-          $('#modalFormMedia').modal('hide');
-
-          this.fetchCategories();
         }
       })
     })
@@ -606,27 +610,22 @@ export default class MediaGalleryComponent {
     })
     
     this.fetchMediaGallery();
-    this.fetchCategories();
+    $('body').on('click', '.btn-delete-media', (evt) => this.handleDeleteMedia(evt.target));
 
     $('#btnMediaImage').on('click', function() {
-      $('#modalFormMedia').find('#home-tab .modal-title').html('Upload Image');
+      $('#modalFormMedia').find('.modal-title').html('Upload Image');
       $('#modalFormMedia').find('input[name=type]').val('image').trigger('change');
     })
 
     $('#btnMediaVideo').on('click', function() {
-      $('#modalFormMedia').find('#home-tab .modal-title').html('Upload Video');
+      $('#modalFormMedia').find('.modal-title').html('Upload Video');
       $('#modalFormMedia').find('input[name=type]').val('video').trigger('change');
     })
 
     $('#btnMediaYoutube').on('click', function() {
-      $('#modalFormMedia').find('#home-tab .modal-title').html('Upload Youtube');
+      $('#modalFormMedia').find('.modal-title').html('Upload Youtube');
       $('#modalFormMedia').find('input[name=type]').val('youtube').trigger('change');
     })
-
-    // assign event to category actions
-    $('body').on('click', '.btn-edit-category', (evt) => this.handleEditCategory(evt.target));
-    $('body').on('click', '.btn-delete-category', (evt) => this.handleDeleteCategory(evt.target));
-    $('body').on('click', '.btn-delete-media', (evt) => this.handleDeleteMedia(evt.target));
 
     $('#modalFormMediaCamera').on('shown.bs.modal', (evt) => this.handleShownModalCamera(evt.target))
     $('#modalFormMediaCamera').on('hidden.bs.modal', (evt) => {

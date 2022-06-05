@@ -264,6 +264,7 @@ export default class FormView {
     modalEdit.find("input[name=description]").val(activityData.description);
     modalEdit.find("input[name=increase_value]").val(activityData.increase_value);
     modalEdit.find("select[name=is_hide]").val(activityData.is_hide).trigger("change");
+    modalEdit.find("select[name=is_focus_enabled]").val(activityData.is_focus_enabled).trigger("change");
     colorHelper.updateColorOfInput(
       modalEdit.find("input[name=color]"),
       activityData.color
@@ -333,6 +334,7 @@ export default class FormView {
       description: $(formContainer).find("input[name=description]").val(),
       color: $(formContainer).find("input[name=color]").val(),
       is_hide: $(formContainer).find("select[name=is_hide]").val(),
+      is_focus_enabled: $(formContainer).find("select[name=is_focus_enabled]").val(),
     };
 
     if(type == 'value' || type == 'badhabit') {

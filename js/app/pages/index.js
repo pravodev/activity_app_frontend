@@ -9,7 +9,6 @@ import HistoryService from "../business_logic/service/historyService";
 import HistoryDataProxy from "../data_proxy/historyDataProxy";
 import MediaGalleryComponent from "./components/media-gallery";
 import FormView from "./form"
-import { debounce } from "lodash";
 
 class HomeView {
   constructor() {

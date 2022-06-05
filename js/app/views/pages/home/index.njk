@@ -45,106 +45,58 @@
                 <div class="modal fade" id="modalFormMedia" tabindex="-1" role="dialog" aria-labelledby="modalFormMediaLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
-                            <div class="modal-header d-flex justify-space-between align-items-center p-0" style="border-bottom: 1px solid #d6caca">
-                                <div class="modal-tabs">
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                <h5 class="modal-title">Upload Media</h5>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
-                                                <h5 class="modal-title">Category</h5>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close" style="width: 50px">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                {# <h5 class="modal-title" id="modalFormMediaLabel">Media</h5>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalFormMediaLabel">Upload Media</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
-                                </button> #}
+                                </button>
                             </div>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <div class="form-media-wrapper">
-                                        <div class="modal-body">
-                                            <input type="hidden" name="type" value="image" />
-                                            <div class="form-group">
-                                                <label>Category</label>
-                                                <select name="category_id" class="form-control">
-                                                </select>
-                                            </div>
-                                            {# <div class="form-group file-media">
-                                                <label>Upload</label>
-                                                <div class="custom-file">
-                                                    <input name="file" type="file" class="custom-file-input" id="fileMedia" accept="image/*">
-                                                    <label class="custom-file-label" for="fileMedia">Choose file</label>
-                                                </div>
-                                            </div> #}
-                                            <div class="youtube-link-input" style="display:none">
-                                                <div class="form-group youtube-link-input">
-                                                    <label>Youtube Link</label>
-                                                    <input type="text" name="youtube_link" class="form-control" placeholder="https://youtu.be/xxxxxxxxxxx"/>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Preview</label>
-                                                    <div class="preview-area"></div>
-                                                </div>
-                                            </div>
-                                            <div class="media-input-dropzone form-group">
-                                                <label>Upload</label>
-                                                <div class="dropzone-container">
-                                                    <div class="dropzone-area">
-                                                        <div class="dropzone-info text-center">
-                                                            <i class="fa fa-upload"></i><br/>
-                                                            <b>Drop files here or click to upload.</b>
-                                                        </div>
-                                                        <input name="file" type="file" class="custom-file-input" id="fileMedia" accept="image/*" style="display:none">
-                                                    </div>
-                                                    <div class="dropzone-action text-center" style="display: none">
-                                                        <button type="button" class="btn btn-cancel">Cancel</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <div class="form-media-wrapper">
+                                <div class="modal-body">
+                                    <input type="hidden" name="type" value="image" />
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <select name="category_id" class="form-control">
+                                        </select>
+                                    </div>
+                                    {# <div class="form-group file-media">
+                                        <label>Upload</label>
+                                        <div class="custom-file">
+                                            <input name="file" type="file" class="custom-file-input" id="fileMedia" accept="image/*">
+                                            <label class="custom-file-label" for="fileMedia">Choose file</label>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary btn-save-media">
-                                                Save changes
-                                            </button>
+                                    </div> #}
+                                    <div class="youtube-link-input" style="display:none">
+                                        <div class="form-group youtube-link-input">
+                                            <label>Youtube Link</label>
+                                            <input type="text" name="youtube_link" class="form-control" placeholder="https://youtu.be/xxxxxxxxxxx"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Preview</label>
+                                            <div class="preview-area"></div>
+                                        </div>
+                                    </div>
+                                    <div class="media-input-dropzone form-group">
+                                        <label>Upload</label>
+                                        <div class="dropzone-container">
+                                            <div class="dropzone-area">
+                                                <div class="dropzone-info text-center">
+                                                    <i class="fa fa-upload"></i><br/>
+                                                    <b>Drop files here or click to upload.</b>
+                                                </div>
+                                                <input name="file" type="file" class="custom-file-input" id="fileMedia" accept="image/*" style="display:none">
+                                            </div>
+                                            <div class="dropzone-action text-center" style="display: none">
+                                                <button type="button" class="btn btn-cancel">Cancel</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <div class="form-category-wrapper">
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <label>Name</label>
-                                                <input class="form-control" name="category_name" placeholder="Category Name"/>
-                                                <input type="hidden" name="category_id" value="" />
-                                            </div>
-                                            <div class="text-right mb-2">
-                                                <button type="button" class="btn btn-primary btn-save-category">
-                                                    Save changes
-                                                </button>
-                                            </div>
-
-
-                                            <h4>List Category</h4>
-                                            <ul class="list-group media-list-category">
-                                                
-                                            </ul>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary btn-save-media">
+                                        Save changes
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -640,7 +592,7 @@
 </script>
 <script type="text/template" data-template="media-detail-youtube-template">
     <input type="hidden" name="media_id" value="${media_id}"/>
-    <iframe width="100%" height="500" src="https://www.youtube.com/embed/${source}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+    <iframe width="100%" height="500" src="${source}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 </script>
 <script type="text/template" data-template="media-detail-youtube-template">
     <input type="hidden" name="media_id" value="${media_id}"/>
@@ -656,23 +608,6 @@
         <source src="${source}">
         Your browser does not support the video tag.
     </video>
-</script>
-<script type="text/template" data-template="media-filter-item">
-    <a class="dropdown-item filter-category" data-categoryid="${id}" href="#">${name}</a>
-</script>
-<script type="text/template" data-template="media-category-option">
-    <option value="${id}">${name}</option>
-</script>
-<script type="text/template" data-template="media-category-list-template">
-<li class="list-group-item d-flex justify-content-between" data-category='${dataJson}'>
-    <div>
-        ${name}
-    </div>
-    <div class="btn-group">
-        <button type="button" class="btn-edit-category btn btn-primary btn-sm"><i class="fa fa-edit"></i></button>
-        <button type="button" class="btn-delete-category btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-    </div>
-</li>
 </script>
 <script src="vendor/recordrtc/RecordRTC.min.js"></script>
 <script src="vendor/videojs/video.js"></script>

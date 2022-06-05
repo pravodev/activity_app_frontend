@@ -400,6 +400,23 @@
         selector: '[data-toggle="tooltip"]'
     });
 </script>
+<script type="text/template" data-template="media-filter-item">
+    <a class="dropdown-item filter-category" data-categoryid="${id}" href="#">${name}</a>
+</script>
+<script type="text/template" data-template="media-category-option">
+    <option value="${id}">${name}</option>
+</script>
+<script type="text/template" data-template="media-category-list-template">
+<li class="list-group-item d-flex justify-content-between" data-category='${dataJson}'>
+    <div>
+        ${name}
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn-edit-category btn btn-primary btn-sm"><i class="fa fa-edit"></i></button>
+        <button type="button" class="btn-delete-category btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+    </div>
+</li>
+</script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@ import ActivityDataProxy from "../data_proxy/ActivityDataProxy";
 import * as alertHelper from "./../core/alert_helper";
 import * as loadingHelper from "./../core/loading_helper";
 import * as templateHelper from "./../core/template_helper";
+import MediaGalleryComponent from "./components/media-gallery";
 
 class SettingView {
   constructor() {
@@ -346,6 +347,8 @@ class SettingView {
   initialize() {
     this.fetchSettingData();
     this.fetchApplicationLogData();
+    const media = new MediaGalleryComponent();
+    media.initiateCategory();
 
     $("#toggleBeepSound").on("change", (evt) =>
       this.handleChangeBeepSound(evt)
