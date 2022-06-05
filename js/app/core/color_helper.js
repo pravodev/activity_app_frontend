@@ -9,6 +9,16 @@ export function updateColorOfInput(input, newColor) {
 }
 
 export function initColorInput(input, options = {}) {
+    let pallete = [
+        ['#000000', '#ea6d2c', '#0e606b', '#8239ea', '#be0002', '#583320'],
+        ['#5c667d', '#ffc300', '#299d86', '#0253a4', '#f04770', '#97582a'],
+        ['#bababa', '#fef3af', '#54a630', '#3987fd', '#f798d0', '#baa262']
+    ];
+
+    if(options.flat) {
+        pallete = [...pallete[0], ...pallete[1], ...pallete[2]];
+    }
+    
     const config = {
         showInput: true,
         className: "full-spectrum",
@@ -18,11 +28,7 @@ export function initColorInput(input, options = {}) {
         maxSelectionSize: 10,
         preferredFormat: "hex",
         showPaletteOnly: true,
-        palette: [
-            ['#000000', '#ea6d2c', '#0e606b', '#8239ea', '#be0002', '#583320',
-            '#5c667d', '#ffc300', '#299d86', '#0253a4', '#f04770', '#97582a',
-            '#bababa', '#fef3af', '#54a630', '#3987fd', '#f798d0', '#baa262']
-        ],
+        palette: pallete,
         ...options
     };
     $(input).spectrum(config);

@@ -427,6 +427,10 @@
 #modalEditColor .sp-container {
     border: none !important;
 }
+
+.activity-edit-container .btn  {
+    padding: 1px 6px;
+}
 </style>
 <link rel="stylesheet" href="vendor/videojs/video-js.min.css">
 <link rel="stylesheet" href="vendor/videojs-record/css/videojs.record.min.css">
@@ -477,9 +481,12 @@
                         <div class="activity-edit-container" activityId='${activity_id}' style="display:none">
                             <div class="form-control border border-1 input-activity-value text-center d-flex align-items-center justify-content-between">
                                 <div>
-                                    <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;">
+                                    <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;display:none">
                                 </div>
                                 <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-edit-focus ${colorBtnFocus}" data-toggle="tooltip" data-placement="top" title="${titleBtnFocus} Focus">
+                                        <i class="fa ${iconBtnFocus}"></i>
+                                    </button>
                                     <button type="button" class="btn btn-edit-hide ${colorBtnHide}" data-toggle="tooltip" data-placement="top" title="${titleBtnHide} Activity">
                                         <i class="fa ${iconBtnHide}"></i>
                                     </button>
@@ -522,9 +529,12 @@
                     <div class="activity-edit-container form-control border border-1 input-activity-value text-center" activityId='${activity_id}' style="display:none">
                         <div class="h-100 d-flex align-items-center justify-content-between">
                             <div>
-                                <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;">
+                                <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;display:none">
                             </div>
                             <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-edit-focus ${colorBtnFocus}" data-toggle="tooltip" data-placement="top" title="${titleBtnFocus} Focus">
+                                    <i class="fa ${iconBtnFocus}"></i>
+                                </button>
                                 <button type="button" class="btn btn-edit-hide ${colorBtnHide}" data-toggle="tooltip" data-placement="top" title="${titleBtnHide} Activity">
                                     <i class="fa ${iconBtnHide}"></i>
                                 </button>
@@ -566,9 +576,12 @@
         <div class="activity-edit-container" activityId='${activity_id}' style="display:none">
             <div class="form-control border border-1 input-activity-value text-center d-flex align-items-center justify-content-between">
                 <div>
-                    <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;">
+                    <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;display:none">
                 </div>
                 <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-edit-focus ${colorBtnFocus}" data-toggle="tooltip" data-placement="top" title="${titleBtnFocus} Focus">
+                        <i class="fa ${iconBtnFocus}"></i>
+                    </button>
                     <button type="button" class="btn btn-edit-hide ${colorBtnHide}" data-toggle="tooltip" data-placement="top" title="${titleBtnHide} Activity">
                         <i class="fa ${iconBtnHide}"></i>
                     </button>
@@ -597,9 +610,12 @@
     <div class="activity-edit-container w-50" activityId='${activity_id}' style="flex: 1 1 auto; display:none">
         <div class="form-control border border-1 input-activity-value text-center d-flex align-items-center justify-content-between">
             <div>
-                <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;">
+                <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;display:none">
             </div>
             <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-edit-focus ${colorBtnFocus}" data-toggle="tooltip" data-placement="top" title="${titleBtnFocus} Focus">
+                    <i class="fa ${iconBtnFocus}"></i>
+                </button>
                 <button type="button" class="btn btn-edit-hide ${colorBtnHide}" data-toggle="tooltip" data-placement="top" title="${titleBtnHide} Activity">
                     <i class="fa ${iconBtnHide}"></i>
                 </button>

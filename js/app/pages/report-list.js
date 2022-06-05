@@ -67,7 +67,12 @@ class ReportListView {
         $(".report-summary-activity").show();
         $('.content-container').show();
 
-        
+        if(params.month) {
+          $('#titleContent').html(`Report of ${dateTimeHelper.monthToText(params.month)} ${params.year}`)
+        }
+
+        $('#monthSelection').val(`${params.month}-${params.year}`);
+
         const focusData = result.response.focusData;
         this.showFocusData(focusData);
       }
@@ -107,11 +112,14 @@ class ReportListView {
           
           const endDate = firstRangeIndex ? new Date(firstRangeIndex.year, firstRangeIndex.month-1, new Date().getDate()) : new Date(params.year, params.month-1, new Date().getDate());
           const startDate = lastRangesIndex ? new Date(lastRangesIndex.year, lastRangesIndex.month-1) : new Date(params.year, params.month-1);
+          const today = new Date();
+          params.date = params.month == (today.getMonth()+1) ? today.getDate() : 1;
+          const selectedDate = new Date(params.year, params.month-1, params.date);
           
           const optionsMonthPicker = {
             autoHide: true,
             autoPick: true,
-            date: new Date(params.year, params.month-1, params.date || new Date().getDate()),
+            date: selectedDate,
             startDate,
             endDate,
             trigger: '.datepicker-trigger',
@@ -434,21 +442,12 @@ class ReportListView {
         year: split[1],
       };
 
-      const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set('month', params.month);
-      searchParams.set('year', params.year);
-      
-      const newUrl = `${url}?${searchParams.toString()}`;
+      const today = new Date();
+      params.date = params.month == (today.getMonth()+1) ? today.getDate() : 1;
 
-      if(history.pushState) {
+      updateUrl(params);
 
-        _this.fetchActivities(params);
-        history.pushState({path: newUrl}, '', newUrl)
-        $('#titleContent').html(`Report of ${dateTimeHelper.monthToText(params.month)} ${params.year}`)
-      } else {
-        window.location.replace(newUrl);
-      }
+      $('#monthPicker').datepicker('setDate', new Date(params.year, params.month-1, params.date));
     })
 
     $('#monthPicker').on('pick.datepicker', function(e) {
@@ -461,7 +460,7 @@ class ReportListView {
       updateUrl(params);
       
       _this.fetchActivities(params);
-      _this.fetchDailyReport(params)
+      _this.fetchDailyReport(params);
     })
 
 

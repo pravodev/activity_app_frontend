@@ -317,7 +317,6 @@ class SettingView {
 
   async handleClickSavePointFocus(evt) {
     const button = $(evt);
-    console.log("🚀 ~ file: setting.js ~ line 320 ~ SettingView ~ handleClickSavePointFocus ~ button", button)
     button.prop('disabled', true).html('<i class="fa fa-spin fa-spinner"></i> Save Changes');
 
     const value = $('.input-point-focus').map((idx, el) => $(el).val()).toArray();
@@ -327,9 +326,7 @@ class SettingView {
       data[index] = value[index-1];
     }
     
-    console.log("🚀 ~ file: setting.js ~ line 327 ~ SettingView ~ handleClickSavePointFocus ~ data", data)
     const command = await this.settingService.saveCommand('point_focus', null, data).execute();
-    console.log("🚀 ~ file: setting.js ~ line 332 ~ SettingView ~ handleClickSavePointFocus ~ command", command)
     button.prop('disabled', false).html('Save Changes');
 
     if (command.success) {

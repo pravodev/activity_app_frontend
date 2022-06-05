@@ -9,6 +9,7 @@ import HistoryService from "../business_logic/service/historyService";
 import HistoryDataProxy from "../data_proxy/historyDataProxy";
 import MediaGalleryComponent from "./components/media-gallery";
 import FormView from "./form"
+import { debounce } from "lodash";
 
 class HomeView {
   constructor() {
@@ -97,6 +98,9 @@ class HomeView {
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
           iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
+          colorBtnFocus: Number(activityData.is_focus_enabled) ? 'text-primary' : '',
+          titleBtnFocus: Number(activityData.is_focus_enabled) ? 'Set Inactive' : 'Set Active',
+          iconBtnFocus: Number(activityData.is_focus_enabled) ? 'fa-bullseye' : 'fa-bullseye',
           order_number: activityData.position,
         };
 
@@ -138,6 +142,9 @@ class HomeView {
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
           iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
+          colorBtnFocus: Number(activityData.is_focus_enabled) ? 'text-primary' : '',
+          titleBtnFocus: Number(activityData.is_focus_enabled) ? 'Set Inactive' : 'Set Active',
+          iconBtnFocus: Number(activityData.is_focus_enabled) ? 'fa-bullseye' : 'fa-bullseye',
           order_number: activityData.position,
         };
 
@@ -161,6 +168,9 @@ class HomeView {
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
           iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
+          colorBtnFocus: Number(activityData.is_focus_enabled) ? 'text-primary' : '',
+          titleBtnFocus: Number(activityData.is_focus_enabled) ? 'Set Inactive' : 'Set Active',
+          iconBtnFocus: Number(activityData.is_focus_enabled) ? 'fa-bullseye' : 'fa-bullseye',
           order_number: activityData.position,
         };
   
@@ -189,6 +199,9 @@ class HomeView {
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
           titleBtnHide: Number(activityData.is_hide) ? 'Show' : 'Hide',
           iconBtnHide: Number(activityData.is_hide) ? 'fa-eye-slash' : 'fa-eye',
+          colorBtnFocus: Number(activityData.is_focus_enabled) ? 'text-primary' : '',
+          titleBtnFocus: Number(activityData.is_focus_enabled) ? 'Set Inactive' : 'Set Active',
+          iconBtnFocus: Number(activityData.is_focus_enabled) ? 'fa-bullseye' : 'fa-bullseye',
           order_number: activityData.position,
         };
   
@@ -260,6 +273,7 @@ class HomeView {
     const currentEl = floatEl.length ? floatEl : textfieldEl;
 
     this.changePosition(direction, currentEl, parentEl);
+    this.updateArrangePosition();
   }
 
   async handleClickButtonAddValue(evt, inputElement) {
@@ -396,26 +410,28 @@ class HomeView {
     this.toggleActivityPage('edit', true)
   }
 
+  async updateArrangePosition() {
+    const value = $('.input-activity-position').map((i, e) => ({position: Number(e.value), activity_id: Number($(e).closest('.activity-edit-container').attr('activityId'))})).toArray()
+
+    if(value.length) {
+        const resp = await this.activityService.updatePositionCommand(value).execute();
+        if(resp.success) {
+          this.tempData = this.tempData.map(data => {
+            const selected = value.filter((a) => a.activity_id == data.id)[0]
+            
+            return {
+              ...data,
+              position: selected.position,
+            }
+          }).sort((a,b) => a.position - b.position)
+        }
+    }
+  }
+  
   async handleClickDoneButton(evt) {
     const activepage = $('#doneAction').data('activepage');
     if(activepage === 'edit') {
-      // $('.input-activity-position')
-      const value = $('.input-activity-position').map((i, e) => ({position: Number(e.value), activity_id: Number($(e).closest('.activity-edit-container').attr('activityId'))})).toArray()
-
-      if(value.length) {
-          const resp = await this.activityService.updatePositionCommand(value).execute();
-          if(resp.success) {
-            this.tempData = this.tempData.map(data => {
-              const selected = value.filter((a) => a.activity_id == data.id)[0]
-              
-              return {
-                ...data,
-                position: selected.position,
-              }
-            }).sort((a,b) => a.position - b.position)
-          }
-      }
-      
+      // await this.updateArrangePosition();
     }
     
     this.disableDraggable();
@@ -481,6 +497,49 @@ class HomeView {
     }
   }
 
+  async handleClickButtonFocusActivity(evt) {
+    const activityId = $(evt).closest('.activity-edit-container').attr('activityid');
+
+    if(!activityId) {
+      console.log('no activity id selected')
+    } else {
+      const selected = this.tempData.filter(d => d.id == activityId)[0];
+
+      const attributes = {
+        id: activityId,
+        is_focus_enabled: Number(!selected.is_focus_enabled),
+        without_validation: true,
+      }
+      const command = await this.activityService
+      .updateCommand(attributes)
+      .execute();
+
+      if (command.success == false) {
+        const firstErrorMsg = command.errors[0].message;
+        alertHelper.showError(firstErrorMsg);
+        return;
+      }
+  
+      const result = command.value;
+      if (result.success) {
+        alertHelper.showSnackBar("Successfully updated !", 1);
+        // refresh activities data
+        this.tempData = this.tempData.map(d => {
+          if(d.id == activityId) {
+            d.is_focus_enabled = attributes.is_focus_enabled;
+          }
+          
+          return d;
+        })
+        $('[data-toggle="tooltip"]').tooltip('hide');
+        this.showActivitiesData(this.tempData);
+        $('.activity-input-container').hide();
+        $('.activity-target-container').hide();
+        $('.activity-edit-container').show();
+        $('.btn-add-value').addClass('btn-mw')
+      }
+    }
+  }
 
   handleClickButtonColorActivity(evt) {
     const activityId = $(evt).closest('.activity-edit-container').attr('activityid');
@@ -648,6 +707,10 @@ class HomeView {
       thisObject.handleClickButtonHideActivity(evt.target);;
     })
 
+    $('body').on('click', '.btn-edit-focus', function(evt){
+      thisObject.handleClickButtonFocusActivity(evt.target);;
+    })
+
     $('body').on('click', '.btn-edit-color', function(evt){
       thisObject.handleClickButtonColorActivity(evt.target);;
     })
@@ -699,8 +762,6 @@ class HomeView {
 
       $('body').on('click', '.btn-delete-activity', function(evt) {
         const activityId = $(this).closest('.modal-content').find('input[name=activity_id]').val();
-        console.log("🚀 ~ file: index.js ~ line 698 ~ HomeView ~ $ ~ $(this)", $(this))
-        console.log("🚀 ~ file: index.js ~ line 698 ~ HomeView ~ $ ~ activityId", activityId)
         formView.handleClickDeleteButton(evt, {
           activityId,
           callbackSuccess: () => {

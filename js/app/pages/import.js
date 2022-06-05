@@ -58,7 +58,6 @@ class ImportView {
     const command = await this.historyService
       .bulkInsertCommand(attributes)
       .execute();
-    console.log("🚀 ~ file: import.js ~ line 61 ~ ImportView ~ handleClickButtonSubmit ~ command", command)
 
     if (command.success == false) {
       const firstErrorMsg = command.errors[0].message;

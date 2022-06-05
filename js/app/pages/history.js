@@ -92,7 +92,6 @@ class HistoryView {
   }
 
   async handleClickButtonDelete(btn) {
-    console.log("🚀 ~ file: history.js ~ line 94 ~ HistoryView ~ handleClickButtonDelete ~ btn", btn)
     // - show confirmation popup
     var result = await alertHelper.showConfirmation("Your history will be delete and cannot be restore");
 
@@ -105,7 +104,6 @@ class HistoryView {
 
     // o get history id
     const historyId = $(btn).attr("historyid");
-    console.log("🚀 ~ file: history.js ~ line 106 ~ HistoryView ~ handleClickButtonDelete ~ historyId", historyId)
 
     // o run command
     const command = await this.historyService
