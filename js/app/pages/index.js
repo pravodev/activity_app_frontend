@@ -384,7 +384,7 @@ class HomeView {
       // $('.activity-target-container').hide();
       this.toggleActivityPage('input', true)
       $('#targetBtn').html('Target');
-      $('#titleSection').hide();
+      $('#titleSection').html('<h3 class="font-weight-bold text-dark">Home</h3>');
     } else {
       // $('.activity-input-container').hide();
       // $('.activity-target-container').show();
@@ -434,7 +434,7 @@ class HomeView {
     }
     
     this.disableDraggable();
-    $('#titleSection').hide();
+    $('#titleSection').html('<h3 class="font-weight-bold text-dark">Home</h3>');
     
     $('.btn-section-action').show();
     $('#doneAction').hide();

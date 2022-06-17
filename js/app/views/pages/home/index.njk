@@ -1,23 +1,27 @@
 {% extends "templates/index.njk" %}
 {% set active_menu = 'home' %}
+
+{% block before_content %}
+<div class="d-flex justify-content-between align-items-center mb-3 px-3 py-2" style="position: sticky;background: #f8f9fc;top: 70px;width: 100%;z-index: 10;">
+    <div>
+        <div id="titleSection">
+            <h3 class="font-weight-bold text-dark">Home</h3>
+        </div>
+    </div>
+    <div id="buttonSection" class="text-right" style="white-space: nowrap;">
+        {# <button class="btn btn-link btn-section-action" id="rearrangeBtn" type="button">Rearrange</button> #}
+        <button class="btn btn-link btn-section-action" id="editBtn" type="button">Edit</button>
+        <button class="btn btn-link btn-section-action" id="targetBtn" type="button">Target</button>
+        <button class="btn btn-link btn-section-action" id="seeAllActivity" type="button">See All</button>
+        <button class="btn btn-link btn-section-done" id="doneAction" type="button" style="display:none">Done</button>
+    </div>
+</div>
+{% endblock before_content %}
+
 {% block content %}
 <!-- Report -->
 {% include "templates/components/empty-box.njk" %}
 <div class="report-wrapper">
-    <div class="d-flex justify-content-between">
-        <div>
-            <div id="titleSection" style="display:none">
-                
-            </div>
-        </div>
-        <div id="buttonSection" class="mb-3 text-right" style="white-space: nowrap;">
-            {# <button class="btn btn-link btn-section-action" id="rearrangeBtn" type="button">Rearrange</button> #}
-            <button class="btn btn-link btn-section-action" id="editBtn" type="button">Edit</button>
-            <button class="btn btn-link btn-section-action" id="targetBtn" type="button">Target</button>
-            <button class="btn btn-link btn-section-action" id="seeAllActivity" type="button">See All</button>
-            <button class="btn btn-link btn-section-done" id="doneAction" type="button" style="display:none">Done</button>
-        </div>
-    </div>
     <div id="float-wrapper" class="draggable">
     </div>
     <div id="text-wrapper">
@@ -55,8 +59,7 @@
                                 <div class="modal-body">
                                     <input type="hidden" name="type" value="image" />
                                     <div class="form-group">
-                                        <label>Category</label>
-                                        <select name="category_id" class="form-control">
+                                        <select name="category_id" class="form-control is-invalid">
                                         </select>
                                     </div>
                                     {# <div class="form-group file-media">
@@ -116,8 +119,7 @@
                             <div class="form-media-wrapper">
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label>Category</label>
-                                        <select name="category_id" class="form-control">
+                                        <select name="category_id" class="form-control is-invalid">
                                         </select>
                                     </div>
                                     <input type="hidden" name="modal_type" value="camera"/>

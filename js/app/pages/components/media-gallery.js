@@ -115,7 +115,7 @@ export default class MediaGalleryComponent {
 
   renderCategory(data) {
     let tempFilterContentHtml = "";
-    let tempOptionContentHtml = "";
+    let tempOptionContentHtml = '<option value="">Please choose category</option>';
     let tempListContentHtml = "";
     const itemFilterTpl = $(
       'script[data-template="media-filter-item"]'
@@ -582,6 +582,15 @@ export default class MediaGalleryComponent {
     // assign event to category actions
     $('body').on('click', '.btn-edit-category', (evt) => this.handleEditCategory(evt.target));
     $('body').on('click', '.btn-delete-category', (evt) => this.handleDeleteCategory(evt.target));
+
+    $('.form-media-wrapper').find('select[name=category_id]').on('change', function() {
+      const val = $(this).val();
+      if(!val) {
+        $(this).addClass('is-invalid');
+      } else {
+        $(this).removeClass('is-invalid');
+      }
+    })
   }
   
   initiate() {

@@ -66,6 +66,11 @@
         z-index: 1040;
     }
 
+    .navbar-sticky {
+        position: sticky;
+        top: 0;
+    }
+
     .swal2-container {
         z-index: 99999 !important;
     }
@@ -257,7 +262,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-sticky navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link rounded-circle">
@@ -277,7 +282,7 @@
                             <div class="nav-link">
                                 <a href="#" id="reportBtnTop" class="mr-1 btn btn-orange btn-link rounded text-white text-lg ml-auto" role="button">R</a>
                                 <a href="/history.html" class="btn btn-link rounded btn-orange text-white text-lg ml-auto" role="button">H</a>
-                                <button id="addActivityBtnTop" class="btn btn-link rounded text-white my-auto ml-3">+</button>
+                                <button type="button" id="addActivityBtnTop" class="btn btn-link rounded text-white text-lg my-auto ml-3">+</button>
                             </div>
                         </li>
                         <div class="topbar-divider"></div>
@@ -320,6 +325,8 @@
                         Fetching Data
                     </div>
                 </div>
+                {% block before_content %}
+                {% endblock before_content %}
                 <div class="container-fluid">
                     {% block content %}
                     {% endblock content %}
