@@ -67,9 +67,9 @@ class ReportListView {
         $(".report-summary-activity").show();
         $('.content-container').show();
 
-        if(params.month) {
-          $('#titleContent').html(`Report of ${dateTimeHelper.monthToText(params.month)} ${params.year}`)
-        }
+        // if(params.month) {
+        //   $('#titleContent').html(`Report of ${dateTimeHelper.monthToText(params.month)} ${params.year}`)
+        // }
 
         $('#monthSelection').val(`${params.month}-${params.year}`);
 
@@ -173,7 +173,6 @@ class ReportListView {
 
     //show report detail activity and hi hide report summary activity
     $(".report-summary-activity").hide();
-    $(".report-focus-activity").hide();
     $(".report-detail-activity").show();
 
     //clear report heading, data report detail, footer report detail
@@ -248,7 +247,6 @@ class ReportListView {
       e.preventDefault();
 
       $(".report-summary-activity").show();
-      $(".report-focus-activity").show();
       $(".report-detail-activity").hide();
       $('#monthSelection').show();
 
@@ -429,9 +427,9 @@ class ReportListView {
       this.handleClickActivityTitle(evt)
     );
 
-    if(params.month) {
-      $('#titleContent').html(`Report of ${dateTimeHelper.monthToText(params.month)} ${params.year}`)
-    }
+    // if(params.month) {
+    //   $('#titleContent').html(`Report of ${dateTimeHelper.monthToText(params.month)} ${params.year}`)
+    // }
 
     const _this = this;
     $('#monthSelection').on('change', function(){
