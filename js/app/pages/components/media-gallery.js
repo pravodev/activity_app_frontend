@@ -224,12 +224,18 @@ export default class MediaGalleryComponent {
     let imageSource = "";
 
     if(attributes.type == 'youtube') {
-      const url = new URL(attributes.value);
-      let youtubeId = attributes.value.substr(attributes.value.indexOf('?v=')+3)
-      if(url.host === 'youtu.be') {
-        youtubeId = url.pathname.replace('/', '')
+      try {
+        const url = new URL(attributes.value);
+        let youtubeId = attributes.value.substr(attributes.value.indexOf('?v=')+3)
+        console.log("🚀 ~ file: media-gallery.js ~ line 229 ~ MediaGalleryComponent ~ generatePreview ~ youtubeId", youtubeId)
+        if(url.host === 'youtu.be') {
+          youtubeId = url.pathname.replace('/', '')
+        }
+        imageSource = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+      } catch (error) {
+        console.error(error)
+        imageSource = "";
       }
-      imageSource = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
     } else if(attributes.type == 'image'){
       if(attributes.file) {
         imageSource = URL.createObjectURL(attributes.file);
@@ -582,7 +588,29 @@ export default class MediaGalleryComponent {
     // assign event to category actions
     $('body').on('click', '.btn-edit-category', (evt) => this.handleEditCategory(evt.target));
     $('body').on('click', '.btn-delete-category', (evt) => this.handleDeleteCategory(evt.target));
+  }
+  
+  async checkValueForEnableButton(evt) {
+    const wrapper = $(evt.target).closest('.form-media-wrapper');
+    const type = wrapper.find('[name=type]').val();
+    const allValue = await this.getValueForm(wrapper)
+    console.log("🚀 ~ file: media-gallery.js ~ line 602 ~ MediaGalleryComponent ~ checkValueForEnableButton ~ allValue", allValue)
+    let isEnabled = false;
 
+    if(type == 'youtube') {
+      isEnabled = allValue.category_id && allValue.value;
+    } else {
+      isEnabled = allValue.category_id && allValue.file;
+    }
+
+    if(wrapper.find('input[name=modal_type]').val() === 'camera') {
+      wrapper.find('.btn-save-camera').prop('disabled', !isEnabled);
+    } else {
+      wrapper.find('.btn-save-media').prop('disabled', !isEnabled);
+    }
+  }
+  
+  initiateFormMedia() {
     $('.form-media-wrapper').find('select[name=category_id]').on('change', function() {
       const val = $(this).val();
       if(!val) {
@@ -591,11 +619,9 @@ export default class MediaGalleryComponent {
         $(this).removeClass('is-invalid');
       }
     })
-  }
-  
-  initiate() {
-    const thisObject = this;
-    thisObject.initiateCategory();
+
+    $('.form-media-wrapper [name=type], .form-media-wrapper input[name=file], .form-media-wrapper input[name=youtube_link], .form-media-wrapper [name=type], .form-media-wrapper [name=category_id]').on('change keyup', (e) => this.checkValueForEnableButton(e))
+    
     $('.form-media-wrapper [name=type]').on('change', this.handleChangeType)
     $('.form-media-wrapper input[name=file]').on('change', (evt) => this.generatePreview(evt.target))
     $('.form-media-wrapper input[name=youtube_link]').on('keyup change', (evt) => this.generatePreview(evt.target))
@@ -608,6 +634,19 @@ export default class MediaGalleryComponent {
         }
       })
     })
+
+    $('#modalFormMedia').on('hidden.bs.modal', function() {
+      // reset field
+      $(this).find('input[name=file]').val('').trigger('change');
+      $(this).find('input[name=youtube_link]').val('').trigger('change');
+      $(this).find('select[name=category_id]').val('').trigger('change');
+    })
+  }
+  
+  initiate() {
+    const thisObject = this;
+    thisObject.initiateCategory();
+    thisObject.initiateFormMedia();
 
     $('body').on('click', '.media-content-item', (evt) => this.showDetail(evt.target))
 
@@ -645,7 +684,7 @@ export default class MediaGalleryComponent {
       $('#videoPlayer').find('.vjs-record-button.vjs-icon-record-stop').click();
     })
 
-    $('#recordVideo').off().on('click', function() {
+    $('#recordVideo').off().on('click', function(e) {
       $('#photoPlayer').hide();
       $('#videoPlayer').show();
       $('#modalFormMediaCamera').find('input[name=type]').val('video')
@@ -656,7 +695,11 @@ export default class MediaGalleryComponent {
         $(this).attr('class', 'btn btn-warning').html('<i class="fa fa-video"></i> Record Video')
         // videoRecordPlayer.record().stop();
         $('#videoPlayer').find('.vjs-record-button.vjs-icon-record-stop').click();
+        setTimeout(() => {
+          thisObject.checkValueForEnableButton(e)
+        }, 100)
       } else {
+        $('.btn-save-camera').prop('disabled', true);
         $(this).data('state', 'process');
         $(this).attr('class', 'btn btn-danger').html('<i class="fa fa-stop-circle"></i> Stop Record')
         // videoRecordPlayer.record().start();
@@ -665,13 +708,14 @@ export default class MediaGalleryComponent {
       
     })
 
-    $('#takePhoto').on('click', function() {
+    $('#takePhoto').on('click', function(e) {
       $('#photoPlayer').show();
       $('#videoPlayer').hide();
       $('#modalFormMediaCamera').find('input[name=type]').val('image')
 
       const currentState = $(this).data('state');
       if(currentState === 'process') {
+        $('.btn-save-camera').prop('disabled', true);
         $(this).data('state', 'idle');
         $('#photoPlayer').find('.vjs-camera-button.vjs-icon-replay').click();
         $(this).attr('class', 'btn btn-warning').html('<i class="fa fa-camera"></i> Take Photo')
@@ -680,6 +724,10 @@ export default class MediaGalleryComponent {
         
         $(this).data('state', 'process');
         $(this).attr('class', 'btn btn-info').html('<i class="fa fa-camera"></i> Retake Photo')
+
+        setTimeout(() => {
+          thisObject.checkValueForEnableButton(e)
+        }, 100)
       }
     })
 
@@ -719,7 +767,7 @@ export default class MediaGalleryComponent {
     $('.dropzone-container .btn-cancel').on('click', function() {
       const container = $(this).closest('.dropzone-container');
 
-      container.find('input[type=file]').val('');
+      container.find('input[type=file]').val('').trigger('change');
       
       container.find('.dropzone-action').hide();
       container.find('.dropzone-info').show();
