@@ -63,7 +63,7 @@
 {% endblock content %}
 {% block header %}
 <!-- Page level plugin style -->
-<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css" rel="stylesheet">
+<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css?v={{ version }}" rel="stylesheet">
 {% endblock header %}
 {% block footer %}
 <script type="text/template" data-template="row-activity-summary">
@@ -109,6 +109,6 @@
         <th>${left}</th>
     </tr>
 </script>
-<script src="vendor/footable-bootstrap/js/footable.min.js"></script>
-<script src="/js/app/pages/report-list.js"></script>
+<script src="vendor/footable-bootstrap/js/footable.min.js?v={{ version }}"></script>
+<script src="/js/app/pages/report-list.js?v={{ version }}"></script>
 {% endblock footer %}

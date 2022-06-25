@@ -146,6 +146,7 @@ export default class FormView {
       $(formContainer).find("input[name=target]").val(this.defaultValue.target);
       $(formContainer).find("input[name=description]").val(this.defaultValue.description);
       $(formContainer).find("input[name=is_editable]").prop("checked", false);
+      $(formContainer).find('input[name=is_media_enabled]').prop('checked', true).trigger('change');
       $(formContainer).find("input[name=is_use_textfield]").prop("checked", false);
       $(formContainer).find("input[name=is_ms_enable]").prop("checked", true).trigger('change');
       $(formContainer).find("input[name=hour]").val('');
@@ -254,6 +255,7 @@ export default class FormView {
       modalEdit.find("input[name=minute]").val(activityData.speedrun_parsed.m);
       modalEdit.find("input[name=second]").val(activityData.speedrun_parsed.s);
       modalEdit.find("input[name=millisecond]").val(activityData.speedrun_parsed.ms);
+      modalEdit.find('select[name=criteria]').val(activityData.criteria).trigger('change');
     } else {
       modalEdit.find("input[name=value]").val(activityData.value);
     }
@@ -272,9 +274,37 @@ export default class FormView {
     modalEdit
       .find("input[name=is_editable]")
       .prop("checked", activityData.can_change == 1);
-    // modalEdit
-    //   .find("#is_use_textfield2")
-    //   .prop("checked", activityData.use_textfield == 1);
+      
+     
+    // BEGIN - handle media value
+    modalEdit.find('input[name=is_media_enabled]').prop('checked', activityData.is_media_enabled == 1).trigger('change')
+    modalEdit.find('select[name=media_type]').val(activityData.media_type || 'image').trigger('change');
+    console.log("🚀 ~ file: form.js ~ line 283 ~ FormView ~ handleClickEditButton ~ activityData", activityData)
+    if(activityData.is_media_enabled && activityData.media_type && activityData.media_file){
+      modalEdit.find('.media-input-form').hide();
+      modalEdit.find('.media-content-container').addClass('has-content').show();
+
+      let mediaContent = "";
+
+      switch (activityData.media_type) {
+        case 'image':
+          mediaContent = `<img class="w-100" style="height: 200px; object-fit: contain" src="${activityData.media_file_link}" />`
+          break;
+        case 'video':
+          mediaContent = `
+          <video class="w-100" style="height:200px" controls>
+            <source src="${activityData.media_file_link}">
+            Your browser does not support the video tag.
+          </video>
+          `
+          break;
+      }
+      
+      modalEdit.find('.media-content-area').html(mediaContent);
+    } else {
+      modalEdit.find('.media-content-container').hide().removeClass('has-content');
+    }
+
 
     if(Number(window.setting.point_system)) {
       modalEdit.find("input[name=bonus_value]").val(activityData.bonus_value);
@@ -314,7 +344,7 @@ export default class FormView {
       // refresh activities data
 
       if(typeof options.callbackSuccess == 'function') {
-        options.callbackSuccess(attributes)
+        options.callbackSuccess({...attributes, ...result.response.data})
       } else {
         this.fetchActivities();
       }
@@ -324,28 +354,35 @@ export default class FormView {
   }
 
   getValueFromForm(formContainer) {
-    const type = $(formContainer).find('select[name=type]').val();
+    formContainer = $(formContainer);
+    const type = formContainer.find('select[name=type]').val();
     // - get data
     const attributes = {
       type,
-      title: $(formContainer).find("input[name=title]").val(),
-      value: $(formContainer).find("input[name=value]").val(),
-      target: $(formContainer).find("input[name=target]").val(),
-      description: $(formContainer).find("input[name=description]").val(),
-      color: $(formContainer).find("input[name=color]").val(),
-      is_hide: $(formContainer).find("select[name=is_hide]").val(),
-      is_focus_enabled: $(formContainer).find("select[name=is_focus_enabled]").val(),
+      title: formContainer.find("input[name=title]").val(),
+      value: formContainer.find("input[name=value]").val(),
+      target: formContainer.find("input[name=target]").val(),
+      description: formContainer.find("input[name=description]").val(),
+      color: formContainer.find("input[name=color]").val(),
+      is_hide: formContainer.find("select[name=is_hide]").val(),
+      is_focus_enabled: formContainer.find("select[name=is_focus_enabled]").val(),
+      is_media_enabled: formContainer.find('input[name=is_media_enabled]').prop('checked') ? 1 : 0,
     };
 
+    if(attributes.is_media_enabled) {
+      attributes.media_type = formContainer.find('select[name=media_type]').val();
+      attributes.media_file = formContainer.find('input[name=media_file]').prop('files')[0] || '';
+    }
+
     if(type == 'value' || type == 'badhabit') {
-      attributes.can_change = $(formContainer).find('input[name=is_editable]').prop("checked") ? 1 : 0;
+      attributes.can_change = formContainer.find('input[name=is_editable]').prop("checked") ? 1 : 0;
     }
 
     if(type == 'speedrun') {
-      const hour = $(formContainer).find('input[name=hour]').val() || 0;
-      const minute = $(formContainer).find('input[name=minute]').val() || 0;
-      const second = $(formContainer).find('input[name=second]').val() || 0;
-      const millisecond = $(formContainer).find('input[name=millisecond]').val() || 0;
+      const hour = formContainer.find('input[name=hour]').val() || 0;
+      const minute = formContainer.find('input[name=minute]').val() || 0;
+      const second = formContainer.find('input[name=second]').val() || 0;
+      const millisecond = formContainer.find('input[name=millisecond]').val() || 0;
 
       if(hour == 0 && minute == 0 && second == 0 && millisecond == 0) {
         alertHelper.showError('Invalid speedrun value');
@@ -359,8 +396,8 @@ export default class FormView {
 
       attributes.value = `${hour}h ${minute}m ${second}s ${millisecond}ms`;
 
-      attributes.criteria = $(formContainer).find("select[name=criteria]").val();
-      attributes.is_ms_enable = $(formContainer).find('input[name=is_ms_enable]').prop('checked') ? 1 : 0;
+      attributes.criteria = formContainer.find("select[name=criteria]").val();
+      attributes.is_ms_enable = formContainer.find('input[name=is_ms_enable]').prop('checked') ? 1 : 0;
     }
 
     if(type == 'alarm') {
@@ -369,14 +406,15 @@ export default class FormView {
     }
 
     if(type != 'speedrun' && type != 'count') {
-      attributes.increase_value = $(formContainer).find('input[name=increase_value]').val()
+      attributes.increase_value = formContainer.find('input[name=increase_value]').val()
     }
 
     if(Number(window.setting.point_system)) {
-      attributes.bonus_value = $(formContainer).find('input[name=bonus_value]').val();
-      attributes.penalty_value = $(formContainer).find('input[name=penalty_value]').val();
-      attributes.point_weight = $(formContainer).find('input[name=point_weight]').val();
+      attributes.bonus_value = formContainer.find('input[name=bonus_value]').val();
+      attributes.penalty_value = formContainer.find('input[name=penalty_value]').val();
+      attributes.point_weight = formContainer.find('input[name=point_weight]').val();
     }
+    console.log("🚀 ~ file: form.js ~ line 394 ~ FormView ~ getValueFromForm ~ attributes", attributes)
     
     return attributes;
   }

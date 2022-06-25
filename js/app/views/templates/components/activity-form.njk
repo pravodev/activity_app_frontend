@@ -1,102 +1,160 @@
 
-<div class="form-group d-flex flex-nowrap align-items-center">
-    <label for="title">Type</label>
-    <div>
-        <select class="form-control" name="type" style="width:auto;">
-            <option value="value">Number Count</option>
-            <option value="count">Text Count</option>
-            <option value="speedrun">Stopwatch</option>
-            {# <option value="alarm">Alarm</option> #}
-            <option value="badhabit">Bad Habit</option>
-        </select>
-    </div>
-</div>
-<div class="form-group d-flex flex-nowrap align-items-center">
-    <label for="title">Title</label>
-    <input type="text" name="title" class="form-control" placeholder="Activity Title">
-</div>
-<div class="form-group d-flex flex-nowrap align-items-center">
-    <label for="description">Description</label>
-    <input type="text" name="description" class="form-control" placeholder="Activity Description">
-</div>
-<div class="form-group d-flex flex-nowrap align-items-center">
-    <label for="color">Color</label>
-    <input type="color" name="color" class="form-control" placeholder="Color" value="#3987fd">
-</div>
-<div class="row"> 
-    <div class="col-9">
-        <div class="form-group d-flex flex-nowrap align-items-center value-container">
-            <label for="value">Value</label>
-            <input type="number" name="value" class="form-control" placeholder="Activity Default Value">
+<ul class="nav nav-tabs" id="formTab{{ formType }}" role="tablist">
+  <li class="nav-item" style="font-size: 14px; white-space: nowrap">
+    <a class="nav-link active" id="basic-info-{{formType}}-tab" data-toggle="tab" href="#basic-info-{{formType}}" role="tab" aria-controls="basic-info-{{formType}}" aria-selected="true">Basic Info</a>
+  </li>
+  <li class="nav-item point-system-form" style="font-size: 14px; white-space: nowrap; display:none">
+    <a class="nav-link" id="point-system-{{formType}}-tab" data-toggle="tab" href="#point-system-{{formType}}" role="tab" aria-controls="point-system-{{formType}}" aria-selected="false">Point System</a>
+  </li>
+  <li class="nav-item" style="font-size: 14px; white-space: nowrap">
+    <a class="nav-link" id="image-video-{{formType}}-tab" data-toggle="tab" href="#image-video-{{formType}}" role="tab" aria-controls="image-video-{{formType}}" aria-selected="false">Image/Video</a>
+  </li>
+</ul>
+
+<div class="tab-content" id="formTab{{ formType }}Content">
+    <div class="tab-pane fade show active" id="basic-info-{{formType}}" role="tabpanel" aria-labelledby="basic-info-{{formType}}-tab">
+        <div class="mt-4">
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="title">Type</label>
+                <div>
+                    <select class="form-control" name="type" style="width:auto;">
+                        <option value="value">Number Count</option>
+                        <option value="count">Text Count</option>
+                        <option value="speedrun">Stopwatch</option>
+                        {# <option value="alarm">Alarm</option> #}
+                        <option value="badhabit">Bad Habit</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="title">Title</label>
+                <input type="text" name="title" class="form-control" placeholder="Activity Title">
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="description">Description</label>
+                <input type="text" name="description" class="form-control" placeholder="Activity Description">
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="color">Color</label>
+                <input type="color" name="color" class="form-control" placeholder="Color" value="#3987fd">
+            </div>
+            <div class="row"> 
+                <div class="col-9">
+                    <div class="form-group d-flex flex-nowrap align-items-center value-container">
+                        <label for="value">Value</label>
+                        <input type="number" name="value" class="form-control" placeholder="Activity Default Value">
+                    </div>
+                </div>
+                <div class="col-3 p-0">
+                    <div class="form-group form-check form-can-change form-check-inline checkbox-lg">
+                        <input type="checkbox" name="is_editable" class="form-check-input" checked>
+                        <label class="form-check-label" for="is_editable" >Editable</label>
+                    </div>
+                </div>
+            </div>
+            <div class="value-speedrun-container" style="display: none !important;">
+                <div class="form-group d-flex flex-nowrap align-items-center">
+                    <label for="value">Target Duration</label>
+                    <div class="d-flex">
+                        <input type="number" placeholder="h" name="hour" class="form-control" style="max-width: 70px" disabled>
+                        <input type="number" placeholder="m" name="minute" class="form-control" style="max-width: 70px">
+                        <input type="number" placeholder="s" name="second" class="form-control" style="max-width: 70px">
+                        <input type="number" placeholder="ms" name="millisecond" class="form-control" style="max-width: 70px">
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-nowrap align-items-center">
+                    <div style="min-width: 150px">
+                    </div>
+                    <div class="form-group form-check form-check-inline checkbox-lg">
+                        <input type="checkbox" name="is_ms_enable" class="form-check-input" checked>
+                        <label class="form-check-label" for="is_ms_enable" >Enable MS Field</label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-nowrap align-items-center">
+                    <label for="value">Criteria</label>
+                    <select name="criteria" class="form-control">
+                        <option value="longer" selected>Longer Better</option>
+                        <option value="shorter">Shorter Better</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center target-container">
+                <label for="target">Monthly Target</label>
+                <input type="number" name="target" class="form-control" min="50" placeholder="Count Target">
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center increase-value-container">
+                <label for="value">Increase Value</label>
+                <input type="number" name="increase_value" class="form-control" placeholder="Increase Value" value="1">
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="value">Hide</label>
+                <select name="is_hide" class="form-control">
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
+                </select>
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="value">Focus Feature</label>
+                <select name="is_focus_enabled" class="form-control">
+                    <option value="1" selected>Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
         </div>
     </div>
-    <div class="col-3 p-0">
-        <div class="form-group form-check form-can-change form-check-inline checkbox-lg">
-            <input type="checkbox" name="is_editable" class="form-check-input" checked>
-            <label class="form-check-label" for="is_editable" >Editable</label>
+    <div class="tab-pane fade" id="point-system-{{formType}}" role="tabpanel" aria-labelledby="point-system-{{formType}}-tab">
+        <div class="mt-4" >
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="value">Bonus Value</label>
+                <input type="number" name="bonus_value" class="form-control" placeholder="Bonus Value" value="">
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="value">Penalty Value</label>
+                <input type="number" name="penalty_value" class="form-control" placeholder="Penalty Value" value="">
+            </div>
+            <div class="form-group d-flex flex-nowrap align-items-center">
+                <label for="value">Point Weight</label>
+                <input type="number" name="point_weight" class="form-control" placeholder="Point Weight" value="1">
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="image-video-{{formType}}" role="tabpanel" aria-labelledby="image-video-{{formType}}-tab">
+        <div class="mt-4">
+            <div class="form-group form-check form-media-enabled form-check-inline checkbox-lg">
+                <input type="checkbox" name="is_media_enabled" class="form-check-input" checked>
+                <label class="form-check-label" for="is_media_enabled" >Enable Image/Video Explanation</label>
+            </div>
+            <div class="media-input-form">
+                <div class="form-group">
+                    <select class="form-control" name="media_type">
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                    </select>
+                </div>
+                <div class="media-input-dropzone form-group">
+                    <label>Upload</label>
+                    <div class="dropzone-container">
+                        <div class="dropzone-area">
+                            <div class="dropzone-info text-center">
+                                <i class="fa fa-upload"></i><br/>
+                                <b>Drop files here or click to upload.</b>
+                            </div>
+                            <input name="media_file" type="file" class="custom-file-input" accept="image/*" style="display:none">
+                        </div>
+                        <div class="dropzone-action text-center" style="display: none">
+                            <button type="button" class="btn btn-cancel">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="media-content-container" style="display:none">
+                <div class="media-content-area">
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-change-media btn-sm btn-outline-primary">Change</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="value-speedrun-container" style="display: none !important;">
-    <div class="form-group d-flex flex-nowrap align-items-center">
-        <label for="value">Target Duration</label>
-        <div class="d-flex">
-            <input type="number" placeholder="h" name="hour" class="form-control" style="width: 70px" disabled>
-            <input type="number" placeholder="m" name="minute" class="form-control" style="width: 70px">
-            <input type="number" placeholder="s" name="second" class="form-control" style="width: 70px">
-            <input type="number" placeholder="ms" name="millisecond" class="form-control" style="width: 70px">
-        </div>
-    </div>
-    <div class="form-group d-flex flex-nowrap align-items-center">
-        <div style="min-width: 150px">
-        </div>
-        <div class="form-group form-check form-check-inline checkbox-lg">
-            <input type="checkbox" name="is_ms_enable" class="form-check-input" checked>
-            <label class="form-check-label" for="is_ms_enable" >Enable MS Field</label>
-        </div>
-    </div>
-    <div class="form-group d-flex flex-nowrap align-items-center">
-        <label for="value">Criteria</label>
-        <select name="criteria" class="form-control">
-            <option value="longer" selected>Longer Better</option>
-            <option value="shorter">Shorter Better</option>
-        </select>
-    </div>
-</div>
-<div class="form-group d-flex flex-nowrap align-items-center target-container">
-    <label for="target">Monthly Target</label>
-    <input type="number" name="target" class="form-control" min="50" placeholder="Count Target">
-</div>
-<div class="form-group d-flex flex-nowrap align-items-center increase-value-container">
-    <label for="value">Increase Value</label>
-    <input type="number" name="increase_value" class="form-control" placeholder="Increase Value" value="1">
-</div>
-<div class="form-group d-flex flex-nowrap align-items-center">
-    <label for="value">Hide</label>
-    <select name="is_hide" class="form-control">
-        <option value="1">Yes</option>
-        <option value="0" selected>No</option>
-    </select>
-</div>
-<div class="form-group d-flex flex-nowrap align-items-center">
-    <label for="value">Focus Feature</label>
-    <select name="is_focus_enabled" class="form-control">
-        <option value="1" selected>Active</option>
-        <option value="0">Inactive</option>
-    </select>
-</div>
-<div class="point-system-form mt-4" style="display:none">
-    <h4 class="font-weight-bold">Point System</h4>
-    <div class="form-group d-flex flex-nowrap align-items-center">
-        <label for="value">Bonus Value</label>
-        <input type="number" name="bonus_value" class="form-control" placeholder="Bonus Value" value="">
-    </div>
-    <div class="form-group d-flex flex-nowrap align-items-center">
-        <label for="value">Penalty Value</label>
-        <input type="number" name="penalty_value" class="form-control" placeholder="Penalty Value" value="">
-    </div>
-    <div class="form-group d-flex flex-nowrap align-items-center">
-        <label for="value">Point Weight</label>
-        <input type="number" name="point_weight" class="form-control" placeholder="Point Weight" value="1">
-    </div>
-</div>
+

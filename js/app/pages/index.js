@@ -57,6 +57,9 @@ class HomeView {
     const disabledValueActivityTpl = $(
       'script[data-template="disabled-value-activity-template"'
     ).text();
+    const mediaActivityTpl = $(
+      'script[data-template="media-activity-template"]'
+    ).text();
 
     if (!dataSource.length) {
       emptyContent.show();
@@ -84,6 +87,13 @@ class HomeView {
     }
 
     dataSource.forEach((activityData) => {
+      let mediaActivityHtml = "";
+      if(activityData.is_media_enabled && activityData.media_type) {
+        mediaActivityHtml = templateHelper.render(mediaActivityTpl, {
+          icon: `fa fa-${activityData.media_type}`
+        })
+      }
+      
       // process if activity is use textfield
       if (['count'].indexOf(activityData.type) >= 0) {
         //prepare content activity row for textfield value
@@ -101,6 +111,7 @@ class HomeView {
           titleBtnFocus: Number(activityData.is_focus_enabled) ? 'Set Inactive' : 'Set Active',
           iconBtnFocus: Number(activityData.is_focus_enabled) ? 'fa-bullseye' : 'fa-bullseye',
           order_number: activityData.position,
+          media_activity_html: mediaActivityHtml,
         };
 
         if(activityData.type == 'badhabit' && activityData.is_red) {
@@ -155,12 +166,13 @@ class HomeView {
           templateValueActivity,
           contentActivityValue
         );
-  
+        
         //prepare content activity row for float value
         let contentActivityRowFloat = {
           title: activityData.title,
           activity_id: activityData.id,
           value_activity_html: valueActivityHtml,
+          media_activity_html: mediaActivityHtml,
           score_target: activityData.score_target,
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
@@ -202,6 +214,7 @@ class HomeView {
           titleBtnFocus: Number(activityData.is_focus_enabled) ? 'Set Inactive' : 'Set Active',
           iconBtnFocus: Number(activityData.is_focus_enabled) ? 'fa-bullseye' : 'fa-bullseye',
           order_number: activityData.position,
+          media_activity_html: mediaActivityHtml,
         };
   
         // modify template change color of button
@@ -446,7 +459,7 @@ class HomeView {
     // $('.activity-input-container').show();
     // $('.activity-target-container').hide();
     // $('.activity-edit-container').hide();
-    // this.toggleActivityPage('input', true)
+    // this. ('input', true)
     this.is_hide = false;
     $('#doneAction').data('activepage', '');
     this.handleClickSeeAllButton();
@@ -663,10 +676,20 @@ class HomeView {
       edit: '.activity-edit-container', 
       rearrange: '.activity-rearrange-container'
     };
+    
+    if(targetKey === 'input') {
+        if(visible) {
+            $('.activity-media').show();
+        } else {
+            $('.activity-media').hide();
+        }
+    } else {
+        $('.activity-media').hide();
+    }
 
     Object.keys(keyList).forEach((key) => {
       const className = keyList[key];
-      
+
       if(key === targetKey) {
         if(visible) {
           $(className).show();
@@ -759,6 +782,69 @@ class HomeView {
       formView.changeTypeListener('#edit_form');
       formView.initPointSystemForm();
 
+      $('body').on('change', 'select[name=media_type]', function() {
+        const container = $(this).closest('.modal-dialog');
+        const type = $(this).val();
+  
+        container.find('input[name=media_file]').val('').trigger('change');
+        container.find('input[name=media_file]').attr('accept', `${type}/*`);
+      })
+
+      $('body').on('change', 'input[name=is_media_enabled]', function() {
+        const container = $(this).closest('.modal-dialog');
+        const isChecked = $(this).prop('checked');
+        const mediaInput = container.find('.media-input-form')
+        const mediaContent = container.find('.media-content-container');
+        
+        if(isChecked) {
+          if(mediaContent.hasClass('has-content'))  {
+            mediaContent.show();
+          } else {
+            mediaInput.show();
+          }
+        } else {
+          mediaInput.hide();
+          mediaContent.hide();
+        }
+      })
+
+      $('body').on('click', '.activity-media', function() {
+        const modal = $('#modalDetailMediaActivity');
+        const id = $(this).closest('.row-activity').data('id');
+        const activity = thisObject.tempData.filter((data) => {
+          return data.id == id
+        })[0]
+
+        if(activity) {
+          let content = "";
+
+          switch (activity.media_type) {
+            case 'image':
+              content = `<img class="w-100" style="height: 400px; object-fit: contain" src="${activity.media_file_link}" />`
+              break;
+            case 'video':
+              content = `
+              <video class="w-100" style="height:400px" controls>
+                <source src="${activity.media_file_link}">
+                Your browser does not support the video tag.
+              </video>
+              `
+              break;
+          }
+          
+          modal.find('.modal-title').html(activity.title);
+          modal.find('.content-media').html(content);
+          $('#modalDetailMediaActivity').modal('show')
+        }
+        
+      })
+      
+      $('body').on('click', '.btn-change-media', function() {
+        const container = $(this).closest('.modal-dialog');
+        container.find('.media-content-container').hide();
+        container.find('.media-input-form').show();
+      })
+      
       $('body').on('click', '.btn-delete-activity', function(evt) {
         const activityId = $(this).closest('.modal-content').find('input[name=activity_id]').val();
         formView.handleClickDeleteButton(evt, {
@@ -790,6 +876,7 @@ class HomeView {
             })
             $('[data-toggle="tooltip"]').tooltip('hide');
             thisObject.showActivitiesData(thisObject.tempData);
+            $('.activity-media').hide();
             $('.activity-input-container').hide();
             $('.activity-target-container').hide();
             $('.activity-edit-container').show();

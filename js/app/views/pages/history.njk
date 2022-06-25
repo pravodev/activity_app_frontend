@@ -87,7 +87,7 @@
 
 {% block header %}
 <!-- Page level plugin style -->
-<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css" rel="stylesheet">
+<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css?v={{ version }}" rel="stylesheet">
 <style>
     #history_table td {
         vertical-align: middle;
@@ -142,6 +142,6 @@
         </div>
     </div>
 </script>
-<script src="vendor/footable-bootstrap/js/footable.min.js"></script>
-<script src="js/app/pages/history.js?v=1"></script>
+<script src="vendor/footable-bootstrap/js/footable.min.js?v={{ version }}"></script>
+<script src="js/app/pages/history.js?v={{ version }}"></script>
 {% endblock footer %}

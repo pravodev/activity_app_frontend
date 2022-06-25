@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive mt-2">
+                <div class=" mt-2">
                     <table class="table table-sm table-bordered data-table" id="dataTable4" data-paging="true" data-paging-size="10" data-paging-position="center" data-filtering="true" data-sorting="true">
                         <thead>
                             <tr>
@@ -65,7 +65,7 @@
             <!-- report sumary activity section -->
             <div class="report-summary-activity" style="display:none">
                 <!-- Data Table New -->
-                <div class="table-responsive mt-2">
+                <div class=" mt-2">
                     <table class="table table-sm table-bordered data-table" id="dataTable1" data-paging="true" data-paging-size="10" data-paging-position="center" data-filtering="true" data-sorting="true">
                         <thead>
                             <tr>
@@ -81,7 +81,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-responsive">
+                <div class="">
                     <table class="table table-sm table-bordered data-table" id="dataTable1" data-paging="true" data-paging-size="10" data-paging-position="center" data-filtering="true" data-sorting="true">
                         <thead>
                             <tr>
@@ -103,7 +103,7 @@
             <div class="report-detail-activity" style="display:none">
                 <!-- template report Heading -->
                 <!-- Data Table New -->
-                <div class="table-responsive">
+                <div class="">
                     <table class="table table-sm table-bordered data-table" id="detail_table" data-paging="true" data-paging-size="10" data-paging-position="center" data-filtering="true" data-sorting="true">
                         <thead>
                             <tr>
@@ -125,7 +125,7 @@
         
         <div class="tab-pane fade" id="focusContent" role="tabpanel" aria-labelledby="focus-tab">
             <div class="report-focus-activity" style="display:none"> 
-                <div class="table-responsive mt-2">
+                <div class=" mt-2">
                     <table class="table table-sm table-bordered data-table" id="dataTable3" data-paging="true" data-paging-size="10" data-paging-position="center" data-filtering="true" data-sorting="true">
                         <thead>
                             <tr>
@@ -149,7 +149,7 @@
 {% endblock content %}
 {% block header %}
 <!-- Page level plugin style -->
-<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css" rel="stylesheet">
+<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css?v={{ version }}" rel="stylesheet">
 {% endblock header %}
 {% block footer %}
 <script type="text/template" data-template="row-activity-summary">
@@ -249,6 +249,6 @@
         <td>${score_value}</td>
     </tr>
 </script>
-<script src="vendor/footable-bootstrap/js/footable.min.js"></script>
-<script src="/js/app/pages/report-list.js"></script>
+<script src="vendor/footable-bootstrap/js/footable.min.js?v={{ version }}"></script>
+<script src="/js/app/pages/report-list.js?v={{ version }}"></script>
 {% endblock footer %}

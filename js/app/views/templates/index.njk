@@ -12,24 +12,24 @@
     <title>{% block title %}Home{% endblock title %}</title>
 
     <!-- Custom fonts for this template -->
-    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css?v={{ version }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css?v={{ version }}" rel="stylesheet">
 
     <!-- Custom stylesheet -->
-    <link rel="stylesheet" href="/css/style.min.css">
-    <link href="/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/css/style.min.css?v={{ version }}">
+    <link href="/vendor/sweetalert2/sweetalert2.min.css?v={{ version }}" rel="stylesheet" type="text/css">
     
     <link rel="icon" 
       type="image/png" 
       href="https://upload.wikimedia.org/wikipedia/commons/6/63/Fitness_logo_watchos.png">
-<link href="/vendor/spectrum-colorpicker/spectrum.css" rel="stylesheet" type="text/css">
-<link href="/vendor/datepicker/datepicker.min.css" rel="stylesheet" type="text/css">
-<link rel="manifest" href="/manifest.json" />
+<link href="/vendor/spectrum-colorpicker/spectrum.css?v={{ version }}" rel="stylesheet" type="text/css">
+<link href="/vendor/datepicker/datepicker.min.css?v={{ version }}" rel="stylesheet" type="text/css">
+<link rel="manifest" href="/manifest.json?v={{ version }}" />
 <!-- ios support -->
 <link rel="apple-touch-icon" href="/assets/img/icon/orig72.png" />
 <link rel="apple-touch-icon" href="/assets/img/icon/orig96.png" />
@@ -184,6 +184,10 @@
         cursor: pointer;
     }
 
+    .dropzone-area.dropzone-disabled {
+        cursor: default !important;
+    }
+
     .dropzone-hightlight, .dropzone-area:active {
         color: #4e73df !important;
         border: 1px dashed #4e73df !important;
@@ -248,6 +252,16 @@
     .form-control.is-invalid, .was-validated select.form-control:invalid {
         background-position: right calc(1.375em + .1875rem) center;
     }
+
+    .sidebar-sticky {
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+        align-self: flex-start;
+    }
+    .btn-navbar {
+        width: 40px !important;
+    }
     </style>
 </head>
 
@@ -284,9 +298,9 @@
                         {# <div class="topbar-divider section-point-menu" style="display: none"></div> #}
                         <li class="nav-item dropdown no-arrow">
                             <div class="nav-link">
-                                <a href="#" id="reportBtnTop" class="mr-1 btn btn-orange btn-link rounded text-white text-lg ml-auto" role="button">R</a>
-                                <a href="/history.html" class="btn btn-link rounded btn-orange text-white text-lg ml-auto" role="button">H</a>
-                                <button type="button" id="addActivityBtnTop" class="btn btn-link rounded text-white text-lg my-auto ml-3">+</button>
+                                <a href="#" id="reportBtnTop" class="btn-navbar mr-1 btn btn-orange btn-link rounded text-white text-lg ml-auto" role="button">R</a>
+                                <a href="/history.html" class="btn-navbar btn btn-link rounded btn-orange text-white text-lg ml-auto" role="button">H</a>
+                                <button type="button" id="addActivityBtnTop" class="btn-navbar btn btn-link rounded text-white text-lg my-auto ml-2">+</button>
                             </div>
                         </li>
                         {# <div class="topbar-divider"></div> #}
@@ -372,6 +386,7 @@
 
                 <div class="form-wrapper">
                     <div id="activity_top_area" class="form">
+                        {% set formType = 'create' %}
                         {% include "templates/components/activity-form.njk" %}
 
                         <div class="form-group text-right">
@@ -402,8 +417,8 @@
         </div>
     </div>
 </div>
-<script src="/vendor/spectrum-colorpicker/spectrum.js"></script>
-<script src="/js/app/pages/header.js"></script>
+<script src="/vendor/spectrum-colorpicker/spectrum.js?v={{ version }}"></script>
+<script src="/js/app/pages/header.js?v={{ version }}"></script>
 
 <script>
   $('[data-toggle="tooltip"]').tooltip()

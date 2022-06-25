@@ -346,12 +346,25 @@ export default class MediaGalleryComponent {
   }
   
 
-  handleFileDropZone(container, files) {
+  async handleFileDropZone(container, files) {
     if(files.length) {
-      const fileUrl = URL.createObjectURL(files[0]);
+      const file = files[0];
+      let fileUrl = URL.createObjectURL(files[0]);
+      if(file.type.includes('video')) {
+        const videoEl = `
+        <video controls="" style="width: 100%;height: 100%;">
+          <source src="${fileUrl}">
+          Your browser does not support the video tag.
+        </video>
+        `;
+
+        container.find('.dropzone-area').append(videoEl);
+      }
 
       this.setPreviewDropZone(container, fileUrl);
+
     } else {
+      container.find('.dropzone-area').find('video').remove();
       this.setPreviewDropZone(container, '');
     }
   }
@@ -361,11 +374,13 @@ export default class MediaGalleryComponent {
       container.find('.dropzone-action').show();
       container.find('.dropzone-info').hide();
       container.find('.dropzone-area').css('background-image', `url(${img})`);
+      container.find('.dropzone-area').addClass('dropzone-disabled')
     } else {
       container.find('.dropzone-action').hide();
       container.find('.dropzone-info').show();
       container.find('.dropzone-area').css('background-image', '');
       container.find('input[type=file]').val()
+      container.find('.dropzone-area').removeClass('dropzone-disabled')
     }
   }
   
@@ -746,9 +761,11 @@ export default class MediaGalleryComponent {
     // handle dropzone
     $('.dropzone-area').on('click', function(e) {
       e.stopPropagation()
-      const inputFile = $(this).find('input[type=file]')
-
-      inputFile.click();
+      if($(this).hasClass('dropzone-disabled') == false) {
+        const inputFile = $(this).find('input[type=file]')
+  
+        inputFile.click();
+      }
     })
 
     $('.dropzone-area input[type=file]').on('click', function(e){
@@ -759,6 +776,7 @@ export default class MediaGalleryComponent {
 
     $('.dropzone-area input[type=file]').on('change', function(e){
       const files = e.target.files;
+      console.log("🚀 ~ file: media-gallery.js ~ line 762 ~ MediaGalleryComponent ~ $ ~ files", files)
       const container = $(this).closest('.dropzone-container')
 
       thisObject.handleFileDropZone(container, files)
@@ -794,7 +812,7 @@ export default class MediaGalleryComponent {
       container.find('input[type=file]')[0].files = files;
 
       thisObject.generatePreview(e.target)
-      // thisObject.handleFileDropZone(container, files)
+      // thisObject.async (container, files)
       // thisObject.generatePreview
     })    
   }

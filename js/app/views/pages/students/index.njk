@@ -33,7 +33,7 @@
 
 {% block header %}
 <!-- Page level plugin style -->
-<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css" rel="stylesheet">
+<link href="vendor/footable-bootstrap/css/footable.bootstrap.min.css?v={{ version }}" rel="stylesheet">
 {% endblock header %}
 
 {% block footer %}
@@ -51,6 +51,6 @@
         </td>
     </tr>
 </script>
-<script src="/vendor/footable-bootstrap/js/footable.min.js"></script>
-<script src="/js/app/pages/students.js"></script>
+<script src="/vendor/footable-bootstrap/js/footable.min.js?v={{ version }}"></script>
+<script src="/js/app/pages/students.js?v={{ version }}"></script>
 {% endblock footer %}

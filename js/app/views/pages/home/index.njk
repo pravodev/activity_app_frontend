@@ -215,6 +215,7 @@
                 </div>
                 <div class="modal-body">
                     <div id="edit_form" class="form">
+                        {% set formType = 'edit' %}
                         {% include "templates/components/activity-form.njk" %}
                         <input type="hidden" name="activity_id" value=""/>
                     </div>
@@ -229,6 +230,21 @@
                             <button id="btn-update-activity" type="button" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalDetailMediaActivity" tabindex="-1" role="dialog" aria-labelledby="modalDetailMediaActivityLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDetailMediaActivityLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="content-media"> 
                 </div>
             </div>
         </div>
@@ -386,18 +402,25 @@
     padding: 1px 6px;
 }
 </style>
-<link rel="stylesheet" href="vendor/videojs/video-js.min.css">
-<link rel="stylesheet" href="vendor/videojs-record/css/videojs.record.min.css">
+<link rel="stylesheet" href="vendor/videojs/video-js.min.css?v={{ version }}">
+<link rel="stylesheet" href="vendor/videojs-record/css/videojs.record.min.css?v={{ version }}">
 {%endblock header %}
 
 {% block footer %}
 <!-- Template -->
+
+<script type="text/template" data-template="media-activity-template">
+    <div role="button" class="input-group-prepend activity-media">
+        <span class="input-group-text"><i class="${icon}"></i></span>
+    </div>
+</script>
 
 <script type="text/template" data-template="row-activity-float">
     <div activityId='${activity_id}' class="row mb-3 row-activity row-activity-float" style="padding-left: 0; padding-right: 0" data-id="${activity_id}">
         <div class="col-12"  style="padding-left: 0; padding-right: 0">
             <div class="d-flex flex-nowrap text-center">
                 <div class="input-group input-activity-group">
+                    ${media_activity_html}
                     ${value_activity_html}
                     <div class="input-group-append">
                         <button type="button" class="btn btn-primary btn-add-value border-0" role="button">${title}</button>
@@ -420,7 +443,8 @@
         <div class="col-12"  style="padding-left: 0; padding-right: 0">
             <div class="d-flex flex-nowrap text-center">
                 <div class="input-group input-activity-group">
-                    <div class="w-50" style="flex: 1 1 auto; ">
+                    ${media_activity_html}
+                    <div class="w-25" style="flex: 1 1 auto; ">
                         <div class="activity-input-container h-100">
                             <div class="d-flex speedrun-container h-100" activityId='${activity_id}'>
                                 <input type="number" placeholder="h" name="hour" id="hour" class="form-control border border-1 text-center input-activity-value h-100" style="width: 25%">
@@ -477,6 +501,7 @@
         <div class="col-12"  style="padding-left: 0; padding-right: 0">
             <div class="d-flex flex-nowrap text-center"> 
                 <div class="input-group input-activity-group">
+                    ${media_activity_html}
                     <input type="text" class="activity-input-container form-control border border-1 input-activity-value h-100" activityId='${activity_id}' placeholder="${placeholder}" aria-label="" style="${style}">
                     <input class="activity-target-container form-control border border-1 input-activity-value h-100 text-center is-red-${is_red}" value='${score_target}' type="text" disabled style="display:none">
                     
@@ -518,7 +543,7 @@
 </script>
 
 <script type="text/template" data-template="editable-value-activity-template">
-    <div class="w-50" style="flex: 1 1 auto">
+    <div class="w-25" style="flex: 1 1 auto">
         <div class="activity-input-float activity-input-container h-100">
             <button class="btn-step step-up shadow" type="button">+</button>
             <input class="form-control border border-1 input-activity-value h-100 text-center" activityId='${activity_id}' data-increasevalue="${increase_value}" value='${value}' type="number" style="${style}">
@@ -555,13 +580,13 @@
 </script>
 
 <script type="text/template" data-template="disabled-value-activity-template">
-    <div class="activity-input-container w-50" style="flex: 1 1 auto;" >
+    <div class="activity-input-container w-25" style="flex: 1 1 auto;" >
         <div class="form-control border border-0 bg-gray-200 input-activity-value h-100 p-0 d-flex align-items-center text-center justify-content-center" activityId='${activity_id}' value='${value}' style="${style}">${value}</div>
     </div>
-    <div class="activity-target-container w-50" style="flex: 1 1 auto; display:none">
+    <div class="activity-target-container w-25" style="flex: 1 1 auto; display:none">
         <div class="form-control border border-0 bg-gray-200 input-activity-value h-100 p-0 d-flex align-items-center text-center justify-content-center is-red-${is_red}">${score_target}</div>
     </div>
-    <div class="activity-edit-container w-50" activityId='${activity_id}' style="flex: 1 1 auto; display:none">
+    <div class="activity-edit-container w-25" activityId='${activity_id}' style="flex: 1 1 auto; display:none">
         <div class="form-control border border-1 input-activity-value text-center d-flex align-items-center justify-content-between">
             <div>
                 <input class="form-control border border-0 input-activity-position h-100" value='${order_number}' type="number" style="height: auto !important;display:none">
@@ -611,9 +636,9 @@
         Your browser does not support the video tag.
     </video>
 </script>
-<script src="vendor/recordrtc/RecordRTC.min.js"></script>
-<script src="vendor/videojs/video.js"></script>
-<script src="vendor/videojs-record/videojs.record.js"></script>
-<script src="vendor/webrtc-adapter/adapter.js"></script>
-<script src="js/app/pages/index.js?v=1"></script>
+<script src="vendor/recordrtc/RecordRTC.min.js?v={{ version }}"></script>
+<script src="vendor/videojs/video.js?v={{ version }}"></script>
+<script src="vendor/videojs-record/videojs.record.js?v={{ version }}"></script>
+<script src="vendor/webrtc-adapter/adapter.js?v={{ version }}"></script>
+<script src="js/app/pages/index.js?v={{ version }}"></script>
 {% endblock footer %}

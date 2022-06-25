@@ -44,6 +44,30 @@ class ActivityDataProxy extends HttpDataProxy {
       )
     );
   }
+
+  insert(data) {
+    const formData = new FormData();
+
+    Object.keys(data).forEach(name => {
+      formData.append(name, data[name])
+    })
+    
+    return this._handleResponseFrom(
+      this._api.requestApi(`activity.add`, formData)
+    );
+  }
+
+  update(data) {
+    const formData = new FormData();
+
+    Object.keys(data).forEach(name => {
+      formData.append(name, data[name])
+    })
+    
+    return this._handleResponseFrom(
+      this._api.requestApi(`activity.update`, formData, `/${data.id}`)
+    );
+  }
 }
 
 export default ActivityDataProxy;

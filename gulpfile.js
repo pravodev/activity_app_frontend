@@ -314,7 +314,7 @@ function compileNunjucks(args) {
   return gulp.src(sourceFile)
   .pipe(newer(config.DESTINATION_PATH+'/**/*.html'))
   // .pipe(plumber())
-  .pipe(gnunjucks.compile({name: 'Sindre'}, opts))
+  .pipe(gnunjucks.compile({version: '1.1'}, opts))
   .pipe(rename(function(path){
     if(path.dirname == 'home') {
       path.dirname = '.';
