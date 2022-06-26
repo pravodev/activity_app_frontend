@@ -380,10 +380,16 @@ class ReportListView {
         let score_value = '';
 
         if(activity.score && activity.type !== 'speedrun') {
-          score_value = `+${activity.score} (${activity.percent}%)`;
+          score_value = `+${activity.score}`;
+          if(activity.percent !== null) {
+            score_value += ` (${activity.percent}%)`;
+          }
         } else if(activity.score && activity.type == 'speedrun') {
           const stopwatchValue = activity.stopwatch_value.map((val) => `(${val})`).join(' ');
-          score_value = `+${activity.score} ${stopwatchValue} (${activity.percent}%)`;
+          score_value = `+${activity.score} ${stopwatchValue}`;
+          if(activity.percent !== null) {
+            score_value += ` (${activity.percent}%)`;
+          }
         }
         
         return templateHelper.render(rowActivitySummaryTpl, {
