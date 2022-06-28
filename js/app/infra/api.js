@@ -214,7 +214,12 @@ var listApi = {
     "auth.getDetailStudent": {
         method: 'GET',
         url: server + "/api/auth/getDetailStudent",
-    }
+    },
+    "pointFocus.delete" : {
+        method : "DELETE",
+        url: server + "/api/point-focus",
+        withToken: false,
+    },
 };
 
 function isIterable(variable) {

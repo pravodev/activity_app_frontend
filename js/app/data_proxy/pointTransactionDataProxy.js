@@ -1,6 +1,6 @@
 import HttpDataProxy from "./httpDataProxy";
 
-class HistoryDataProxy extends HttpDataProxy {
+class PointTransactionDataProxy extends HttpDataProxy {
   constructor() {
     super("pointTransaction");
   }
@@ -63,4 +63,4 @@ class HistoryDataProxy extends HttpDataProxy {
   }
 }
 
-export default HistoryDataProxy;
+export default PointTransactionDataProxy;

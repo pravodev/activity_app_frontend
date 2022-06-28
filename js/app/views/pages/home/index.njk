@@ -401,6 +401,12 @@
 .activity-edit-container .btn  {
     padding: 1px 6px;
 }
+.activity-target-container .form-control,
+.activity-target-container.form-control {
+    display: flex;
+    justify-content: space-between;
+}
+
 </style>
 <link rel="stylesheet" href="vendor/videojs/video-js.min.css?v={{ version }}">
 <link rel="stylesheet" href="vendor/videojs-record/css/videojs.record.min.css?v={{ version }}">
@@ -454,7 +460,10 @@
                             </div>
                         </div>
                         <div class="activity-target-container h-100" style="display:none">
-                            <input class="form-control border border-1 input-activity-value h-100 text-center is-red-${is_red}" value='${score_target}' type="text" disabled>
+                            <div class="form-control disabled border border-1 input-activity-value h-100 text-center is-red-${is_red}">
+                                <span>${score_target}</span> 
+                                <span><i class="fa fa-bullseye"></i> ${count_yesterday}</span>
+                            </div>
                         </div>
                         <div class="activity-edit-container" activityId='${activity_id}' style="display:none">
                             <div class="form-control border border-1 input-activity-value text-center d-flex align-items-center justify-content-between">
@@ -503,7 +512,10 @@
                 <div class="input-group input-activity-group">
                     ${media_activity_html}
                     <input type="text" class="activity-input-container form-control border border-1 input-activity-value h-100" activityId='${activity_id}' placeholder="${placeholder}" aria-label="" style="${style}">
-                    <input class="activity-target-container form-control border border-1 input-activity-value h-100 text-center is-red-${is_red}" value='${score_target}' type="text" disabled style="display:none">
+                    <div class="activity-target-container form-control disabled border border-1 input-activity-value h-100 text-center is-red-${is_red}" style="display:none">
+                        <span>${score_target}</span> 
+                        <span><i class="fa fa-bullseye"></i> ${count_yesterday}</span>
+                    </div>
                     
                     <div class="activity-edit-container form-control border border-1 input-activity-value text-center" activityId='${activity_id}' style="display:none">
                         <div class="h-100 d-flex align-items-center justify-content-between">
@@ -550,7 +562,10 @@
             <button class="btn-step step-down shadow" type="button">-</button>
         </div>
         <div class="activity-target-container h-100" style="display:none">
-            <input class="form-control border border-1 input-activity-value h-100 text-center is-red-${is_red}" value='${score_target}' type="text" disabled>
+            <div class="form-control disabled border border-1 input-activity-value h-100 text-center is-red-${is_red}">
+                <span>${score_target}</span> 
+                <span><i class="fa fa-bullseye"></i> ${count_yesterday}</span>
+            </div>
         </div>
         <div class="activity-edit-container" activityId='${activity_id}' style="display:none">
             <div class="form-control border border-1 input-activity-value text-center d-flex align-items-center justify-content-between">
@@ -584,7 +599,10 @@
         <div class="form-control border border-0 bg-gray-200 input-activity-value h-100 p-0 d-flex align-items-center text-center justify-content-center" activityId='${activity_id}' value='${value}' style="${style}">${value}</div>
     </div>
     <div class="activity-target-container w-25" style="flex: 1 1 auto; display:none">
-        <div class="form-control border border-0 bg-gray-200 input-activity-value h-100 p-0 d-flex align-items-center text-center justify-content-center is-red-${is_red}">${score_target}</div>
+        <div class="form-control disabled border border-1 input-activity-value h-100 text-center is-red-${is_red}">
+            <span>${score_target}</span> 
+            <span><i class="fa fa-bullseye"></i> ${count_yesterday}</span>
+        </div>
     </div>
     <div class="activity-edit-container w-25" activityId='${activity_id}' style="flex: 1 1 auto; display:none">
         <div class="form-control border border-1 input-activity-value text-center d-flex align-items-center justify-content-between">

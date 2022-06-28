@@ -10,6 +10,8 @@ import AuthService from "../business_logic/service/authService";
 import AuthDataProxy from "../data_proxy/authDataProxy";
 import { parseQueryString, updateUrl } from "../core/url_helper";
 import { copyTextToClipboard } from '../core/copy_helper';
+import PointFocusService from "../business_logic/service/pointFocusService";
+import PointFocusDataProxy from "../data_proxy/pointFocusDataProxy";
 
 class ReportListView {
   constructor() {
@@ -17,6 +19,7 @@ class ReportListView {
     this.historyService = new HistoryService(new HistoryDataProxy());
     this._reportData = [];
     this.authService = new AuthService(new AuthDataProxy());
+    this.pointFocusService = new PointFocusService(new PointFocusDataProxy());
   }
 
   getMonthAndYearFromUrlParameter() {
@@ -296,7 +299,8 @@ class ReportListView {
             "start_date": activity['start_date'],
             "end_date": activity['end_date'],
             "repeated_days_count": activity['repeated_days_count'],
-            "point": activity['point']
+            "point": activity['point'],
+            "point_focus_id": activity['id'],
         });
       })
 
@@ -405,6 +409,39 @@ class ReportListView {
     }
   }
   
+  async handleDeletePointFocus(e) {
+    e.stopPropagation();
+    var btn = $(e.target);
+    if(!btn.is('button')) {
+      btn = $(e.currentTarget);
+    }
+    
+    // - show confirmation popup
+    var result = await alertHelper.showConfirmation("Your point focus will be delete and cannot be restore");
+
+    // - if user cancel delete
+    if(!result.isConfirmed) return;
+
+    loadingHelper.toggleLoading(true);
+    
+    const pointfocusid = btn.attr('pointfocusid');
+    const command = await this.pointFocusService
+      .destroyCommand(pointfocusid)
+      .execute()
+
+    loadingHelper.toggleLoading(false);
+    
+    if (command.success) {
+      const result = command.value;
+      if (result.success) {
+        alertHelper.showSnackBar("successfully deleted !");
+
+        const params = parseQueryString(window.location.search);
+        this.fetchActivities(params);
+      }
+    }
+  }
+  
   initialize() {
     const params = parseQueryString(window.location.search);
     this.fetchActivities(params);
@@ -493,6 +530,8 @@ class ReportListView {
         tab: tabkey
       })
     })
+
+    $('body').on('click', '.btn-delete-point-focus', (e) => this.handleDeletePointFocus(e))
   }
 }
 
