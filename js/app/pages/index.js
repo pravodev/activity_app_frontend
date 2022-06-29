@@ -709,6 +709,116 @@ class HomeView {
       }
     })
   }
+
+  async fetchDetailReport(el) {
+    const dateObject = new Date();
+    const currentMonth = dateObject.getMonth() + 1;
+    const currentYear = dateObject.getFullYear();
+    const activityid = $(el).closest('.row-activity').attr('activityid');
+    const modal = $('#modalDetailTarget');
+
+    // reset
+    modal.find('.modal-title').html('');
+    modal.find('.report-detail-activity').hide();
+
+    modal.modal('show');
+
+    const params = {
+      month: currentMonth,
+      year: currentYear,
+      activity_id: activityid
+    }
+
+    modal.find('.loading-container').html('fetch data...');
+    
+    const command = await this.activityService
+      .getByMonthAndYearCommand(params.month, params.year, params)
+      .execute();
+
+    if (command.success) {
+      const result = command.value;
+      modal.find('.loading-container').html('');
+      if (result.success) {
+        const detailActivity = result.response.data[0];
+
+        if(detailActivity) {
+          let title = detailActivity["title"];
+          if(detailActivity.type == 'speedrun') {
+            title += ' (' + detailActivity.value + ')';
+          }
+          modal.find('.modal-title').html(title);
+
+          const templateDetail = detailActivity.type === 'speedrun' ? 'row-footer-report-detail-activity-speedrun' : 'row-footer-report-detail-activity';
+          const rowDataReportDetailActivityTpl = $(
+            'script[data-template="row-data-report-detail-activity"'
+          ).text();
+          const rowFooterReportDetailActivityTpl = $(
+            `script[data-template="${templateDetail}"`
+          ).text();
+          
+          modal.find(".report-detail-activity .data-report-detail-activity").html(
+            detailActivity["histories"].map(function (history) {
+              var value = null;
+              if (history["value"] != null) {
+                value = history["value"];
+              } else if (history["value_textfield"] != null) {
+                value = history["value_textfield"];
+              } else {
+                value = 0;
+              }
+              return templateHelper.render(rowDataReportDetailActivityTpl, {
+                date: history["date"],
+                time: history["time"],
+                value: value,
+              });
+            })
+          );
+
+          const leftStyle = detailActivity['left'] < 0 ? 'display:none' : '';
+
+          //- render total report detail activity
+          modal.find(".report-detail-activity .total-report-detail-activity").html(
+            templateHelper.render(rowFooterReportDetailActivityTpl, {
+              score: detailActivity["score"],
+              target: detailActivity["target"],
+              left: detailActivity["left"],
+              best_time: detailActivity["best_time"],
+              best_record_alltime: detailActivity["best_record_alltime"],
+              average_time: detailActivity["score"],
+              count: detailActivity["count"],
+              leftStyle: leftStyle,
+              point: detailActivity["point"] === null ? 'N/A' : Number(detailActivity["point"]),
+            })
+          );
+
+          modal.find('.report-detail-activity').show();
+        } else {
+          modal.find('.loading-container').html('No Data');
+          modal.find('.report-detail-activity').hide();
+        }
+        
+        // const activitySummary = result.response.data.filter(v => v.type !== 'speedrun')
+        // this._reportData = result.response.data;
+        // this.showActivitiesSummary(activitySummary);
+
+        // const activitySummarySpeedrun = result.response.data.filter(v => v.type == 'speedrun')
+        // this.showActivitiesSummary(activitySummarySpeedrun, '.data-activity-speedrun-summary');
+
+        // loadingHelper.toggleLoading(false);
+        // $(".report-summary-activity").show();
+        // $('.content-container').show();
+
+        // // if(params.month) {
+        // //   $('#titleContent').html(`Report of ${dateTimeHelper.monthToText(params.month)} ${params.year}`)
+        // // }
+
+        // $('#monthSelection').val(`${params.month}-${params.year}`);
+
+        // const focusData = result.response.focusData;
+        // this.showFocusData(focusData);
+      }
+    }
+  }
   
   initialize() {
     var thisObject = this;
@@ -912,15 +1022,20 @@ class HomeView {
       })
     })
 
-    $('body').on('click', '.activity-target-container', function(event) {
-      const dateObject = new Date();
-      const currentMonth = dateObject.getMonth() + 1;
-      const currentYear = dateObject.getFullYear();
-      const activityid = $(this).closest('.row-activity').attr('activityid');
+    // $('body').on('click', '.activity-target-container', function(event) {
+    //   const dateObject = new Date();
+    //   const currentMonth = dateObject.getMonth() + 1;
+    //   const currentYear = dateObject.getFullYear();
+    //   const activityid = $(this).closest('.row-activity').attr('activityid');
 
-      const link = `/report/list.html?year=${currentYear}&month=${currentMonth}&tab=month&activityid=${activityid}`;
-      window.location.replace(link);
-    })
+    //   const link = `/report/list.html?year=${currentYear}&month=${currentMonth}&tab=month&activityid=${activityid}`;
+    //   window.location.replace(link);
+    // })
+
+    // get report
+    $('body').on('click', '.activity-target-container', function(e){
+      thisObject.fetchDetailReport(this);
+    });
   }
 }
 
