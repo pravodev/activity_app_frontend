@@ -499,11 +499,7 @@ export default class MediaGalleryComponent {
         imageOutputType: 'dataURL',
         imageOutputFormat: 'image/png',
         imageOutputQuality: 0.92,
-        image: {
-          // image media constraints: set resolution of camera
-          width: { min: 640, ideal: 640, max: 1280 },
-          height: { min: 480, ideal: 480, max: 920 }
-        },
+        image: true,
       }
     }
 
@@ -526,6 +522,8 @@ export default class MediaGalleryComponent {
     
     // user clicked the record button and started recording
     player.on('startRecord', function() {
+        const canvasEl = $(`#${videoIdEl}`).closest('.video-el').find('canvas');
+        console.log("🚀 ~ file: media-gallery.js ~ line 526 ~ MediaGalleryComponent ~ player.on ~ canvasEl", canvasEl)
         console.log('started recording!');
     });
     

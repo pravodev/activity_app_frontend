@@ -38,5 +38,17 @@
                 //replace the "Choose a file" label
                 $(this).next('.custom-file-label').html(fileName);
             })
+
+            $('#sidebarToggleTop').on('click', function() {
+                if ($(window).width() < 480) {
+                    if ($(".sidebar").hasClass("toggled")) {
+                        $('#reportBtnTop').removeClass("d-none")
+                        $('#historyBtnTop').removeClass("d-none")
+                    } else {
+                        $('#reportBtnTop').addClass("d-none")
+                        $('#historyBtnTop').addClass("d-none")
+                    }
+                }
+            })
         })
     </script>

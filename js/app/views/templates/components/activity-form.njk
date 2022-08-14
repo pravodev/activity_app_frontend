@@ -32,7 +32,7 @@
             </div>
             <div class="form-group d-flex flex-nowrap align-items-center">
                 <label for="description">Description</label>
-                <input type="text" name="description" class="form-control" placeholder="Activity Description">
+                <textarea  name="description" class="form-control" placeholder="Activity Description" rows="3" style="height: auto !important"></textarea>
             </div>
             <div class="form-group d-flex flex-nowrap align-items-center">
                 <label for="color">Color</label>
@@ -87,7 +87,7 @@
                 <input type="number" name="increase_value" class="form-control" placeholder="Increase Value" value="1">
             </div>
             <div class="form-group d-flex flex-nowrap align-items-center">
-                <label for="value">Hide</label>
+                <label for="value">Active Status</label>
                 <select name="is_hide" class="form-control">
                     <option value="1">Yes</option>
                     <option value="0" selected>No</option>
@@ -103,7 +103,7 @@
         </div>
     </div>
     <div class="tab-pane fade" id="point-system-{{formType}}" role="tabpanel" aria-labelledby="point-system-{{formType}}-tab">
-        <div class="mt-4" >
+        <div class="mt-4 point-system-form" >
             <div class="form-group d-flex flex-nowrap align-items-center">
                 <label for="value">Bonus Value</label>
                 <input type="number" name="bonus_value" class="form-control" placeholder="Bonus Value" value="">
@@ -121,10 +121,10 @@
     <div class="tab-pane fade" id="image-video-{{formType}}" role="tabpanel" aria-labelledby="image-video-{{formType}}-tab">
         <div class="mt-4">
             <div class="form-group form-check form-media-enabled form-check-inline checkbox-lg">
-                <input type="checkbox" name="is_media_enabled" class="form-check-input" checked>
+                <input type="checkbox" name="is_media_enabled" class="form-check-input">
                 <label class="form-check-label" for="is_media_enabled" >Enable Image/Video Explanation</label>
             </div>
-            <div class="media-input-form">
+            <div class="media-input-form" style="display: none">
                 <div class="form-group">
                     <select class="form-control" name="media_type">
                         <option value="image">Image</option>

@@ -163,6 +163,8 @@ class ReportListView {
             "point" : activity["point"] === null ? 'N/A' : Number(activity["point"]),
             "redscore" : activity['is_red'],
             "redcount" : activity.type == 'speedrun' ? activity['is_red_count'] : false,
+            total_point: activity["total_point"] === null ? 'N/A' : Number(activity["total_point"]),
+            break_record_point: activity["break_record_point"] === null ? 'N/A' : Number(activity["break_record_point"]),
         });
       })
 
@@ -241,6 +243,8 @@ class ReportListView {
         count: detailActivity["count"],
         leftStyle: leftStyle,
         point: detailActivity["point"] === null ? 'N/A' : Number(detailActivity["point"]),
+        total_point: detailActivity["total_point"] === null ? 'N/A' : Number(detailActivity["total_point"]),
+        break_record_point: detailActivity["break_record_point"] === null ? 'N/A' : Number(detailActivity["break_record_point"]),
       })
     );
     $("#btnBack").show();
@@ -279,7 +283,7 @@ class ReportListView {
     if(!activities.length) {
       $(`.report-focus-activity ${tbodyClassName}`).html(`
         <tr>
-          <td colspan="5" class="text-center">No data</td>
+          <td colspan="6" class="text-center">No data</td>
         </tr>
       `)
 
@@ -301,6 +305,7 @@ class ReportListView {
             "repeated_days_count": activity['repeated_days_count'],
             "point": activity['point'],
             "point_focus_id": activity['id'],
+            "redpoint": Number(activity['point']) < 0 ? 'true' : 'false',
         });
       })
 
@@ -456,10 +461,11 @@ class ReportListView {
     }
 
     // if has params tab, set active tab base on query param
-    if(['month', 'daily'].indexOf(params.tab) >= 0) {
+    if(['month', 'daily', 'focus'].indexOf(params.tab) >= 0) {
       const idEl = {
         month: '#monthly-tab',
-        daily: '#daily-tab'
+        daily: '#daily-tab',
+        focus: '#focus-tab',
       }
 
       $(idEl[params.tab]).click();

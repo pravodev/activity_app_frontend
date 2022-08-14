@@ -144,9 +144,9 @@ export default class FormView {
       $(formContainer).find("input[name=title]").val(this.defaultValue.title);
       $(formContainer).find("input[name=value]").val(this.defaultValue.value);
       $(formContainer).find("input[name=target]").val(this.defaultValue.target);
-      $(formContainer).find("input[name=description]").val(this.defaultValue.description);
+      $(formContainer).find("textarea[name=description]").val(this.defaultValue.description);
       $(formContainer).find("input[name=is_editable]").prop("checked", false);
-      $(formContainer).find('input[name=is_media_enabled]').prop('checked', true).trigger('change');
+      $(formContainer).find('input[name=is_media_enabled]').prop('checked', false).trigger('change');
       $(formContainer).find("input[name=is_use_textfield]").prop("checked", false);
       $(formContainer).find("input[name=is_ms_enable]").prop("checked", true).trigger('change');
       $(formContainer).find("input[name=hour]").val('');
@@ -260,10 +260,12 @@ export default class FormView {
       modalEdit.find("input[name=value]").val(activityData.value);
     }
     // set form
+    modalEdit.find('#switchStatus').prop('checked', activityData.status);
+    modalEdit.find('.custom-switch label').html(activityData.status ? 'Active' : 'Inactive');
     modalEdit.find("select[name=type]").val(activityData.type).trigger('change');
     modalEdit.find("input[name=title]").val(activityData.title);
     modalEdit.find("input[name=target]").val(activityData.target);
-    modalEdit.find("input[name=description]").val(activityData.description);
+    modalEdit.find("textarea[name=description]").val(activityData.description);
     modalEdit.find("input[name=increase_value]").val(activityData.increase_value);
     modalEdit.find("select[name=is_hide]").val(activityData.is_hide).trigger("change");
     modalEdit.find("select[name=is_focus_enabled]").val(activityData.is_focus_enabled).trigger("change");
@@ -362,12 +364,17 @@ export default class FormView {
       title: formContainer.find("input[name=title]").val(),
       value: formContainer.find("input[name=value]").val(),
       target: formContainer.find("input[name=target]").val(),
-      description: formContainer.find("input[name=description]").val(),
+      description: formContainer.find("textarea[name=description]").val(),
       color: formContainer.find("input[name=color]").val(),
       is_hide: formContainer.find("select[name=is_hide]").val(),
       is_focus_enabled: formContainer.find("select[name=is_focus_enabled]").val(),
       is_media_enabled: formContainer.find('input[name=is_media_enabled]').prop('checked') ? 1 : 0,
     };
+
+    const status = formContainer.find('#switchStatus')
+    if(status.length) {
+      attributes.status = status.prop('checked') ? 1 : 0;
+    }
 
     if(attributes.is_media_enabled) {
       attributes.media_type = formContainer.find('select[name=media_type]').val();

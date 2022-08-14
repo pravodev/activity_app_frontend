@@ -69,6 +69,7 @@
     .navbar-sticky {
         position: sticky;
         top: 0;
+        width: 100%;
     }
 
     .swal2-container {
@@ -277,7 +278,7 @@
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" class="d-flex flex-column" style="overflow-x: unset;">
 
             <!-- Main Content -->
             <div id="content">
@@ -302,7 +303,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <div class="nav-link">
                                 <a href="#" id="reportBtnTop" class="btn-navbar mr-1 btn btn-orange btn-link rounded text-white text-lg ml-auto" role="button">R</a>
-                                <a href="/history.html" class="btn-navbar btn btn-link rounded btn-orange text-white text-lg ml-auto" role="button">H</a>
+                                <a href="/history.html" id="historyBtnTop" class="btn-navbar btn btn-link rounded btn-orange text-white text-lg ml-auto" role="button">H</a>
                                 <button type="button" id="addActivityBtnTop" class="btn-navbar btn btn-link rounded text-white text-lg my-auto ml-2">+</button>
                             </div>
                         </li>

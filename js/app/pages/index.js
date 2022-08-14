@@ -73,17 +73,15 @@ class HomeView {
     let tempActivityRowFloatHtml = "";
     let tempActivityRowTextfieldHtml = "";
 
-    function changeColorBtnActivity(color, el) {
-      if (color) {
-        el.find(".btn-add-value").css("background-color", color);
-        // el.find(".btn-add-value").css(
-        //   "color",
-        //   colorHelper.isDark(color) ? "#ffffff" : "#000000"
-        // );
+    function changeBtnActivity(data, el) {
+      if (data['color']) {
+        el.find(".btn-add-value").css("background-color", data['color']);
       } else {
         el.find(".btn-add-value").css("background-color", "");
         el.find(".btn-add-value").css("color", "");
       }
+
+      el.find(".btn-add-value").prop('disabled', !data['status']);
     }
 
     dataSource.forEach((activityData) => {
@@ -103,6 +101,7 @@ class HomeView {
           placeholder: activityData.type == 'speedrun' ? 'TAST' : 'Text Field',
           score_target: activityData.score_target,
           count_yesterday: activityData.count_yesterday,
+          focus_disabled_class: activityData.is_focus_enabled ? '' : 'text-gray-600',
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
@@ -124,7 +123,7 @@ class HomeView {
         rowActivityTextfieldTpl
           .find(".changepos-btn-wrapper")
           .attr("data-activityId", activityData["id"]);
-        changeColorBtnActivity(activityData["color"], rowActivityTextfieldTpl);
+        changeBtnActivity(activityData, rowActivityTextfieldTpl);
 
         // get html script from modified template
         rowActivityTextfieldTpl = rowActivityTextfieldTpl[0].outerHTML;
@@ -149,6 +148,7 @@ class HomeView {
           increase_value: activityData.increase_value,
           score_target: activityData.score_target,
           count_yesterday: activityData.count_yesterday,
+          focus_disabled_class: activityData.is_focus_enabled ? '' : 'text-gray-600',
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
@@ -177,6 +177,7 @@ class HomeView {
           media_activity_html: mediaActivityHtml,
           score_target: activityData.score_target,
           count_yesterday: activityData.count_yesterday,
+          focus_disabled_class: activityData.is_focus_enabled ? '' : 'text-gray-600',
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
@@ -193,7 +194,7 @@ class HomeView {
         rowActivityFloatTpl
           .find(".changepos-btn-wrapper")
           .attr("data-activityId", activityData["id"]);
-        changeColorBtnActivity(activityData["color"], rowActivityFloatTpl);
+        changeBtnActivity(activityData, rowActivityFloatTpl);
   
         // get html script from modified template
         rowActivityFloatTpl = rowActivityFloatTpl[0].outerHTML;
@@ -209,6 +210,7 @@ class HomeView {
           activity_id: activityData.id,
           score_target: activityData.score_target,
           count_yesterday: activityData.count_yesterday,
+          focus_disabled_class: activityData.is_focus_enabled ? '' : 'text-gray-600',
           is_red: activityData.is_red ? 'true' : 'false',
           color: activityData.color,
           colorBtnHide: Number(activityData.is_hide) ? '' : 'text-primary',
@@ -226,7 +228,7 @@ class HomeView {
         rowActivitySpeedrunTpl
           .find(".changepos-btn-wrapper")
           .attr("data-activityId", activityData["id"]);
-        changeColorBtnActivity(activityData["color"], rowActivitySpeedrunTpl);
+        changeBtnActivity(activityData, rowActivitySpeedrunTpl);
   
         rowActivitySpeedrunTpl.find('input[name=hour]').prop('disabled', activityData.is_ms_enable);
         rowActivitySpeedrunTpl.find('input[name=millisecond]').prop('disabled', !activityData.is_ms_enable);
@@ -498,7 +500,7 @@ class HomeView {
         // refresh activities data
         this.tempData = this.tempData.map(d => {
           if(d.id == activityId) {
-            d.is_hide = attributes.is_hide;
+            d = Object.assign(d, result.response.data);
           }
           
           return d;
@@ -507,6 +509,7 @@ class HomeView {
         this.showActivitiesData(this.tempData);
         $('.activity-input-container').hide();
         $('.activity-target-container').hide();
+        $('.activity-media').hide();
         $('.activity-edit-container').show();
         $('.btn-add-value').addClass('btn-mw')
       }
@@ -551,6 +554,7 @@ class HomeView {
         this.showActivitiesData(this.tempData);
         $('.activity-input-container').hide();
         $('.activity-target-container').hide();
+        $('.activity-media').hide();
         $('.activity-edit-container').show();
         $('.btn-add-value').addClass('btn-mw')
       }
@@ -976,28 +980,40 @@ class HomeView {
         formView.handleClickEditButton(evt.target, selected)
       });
 
+      const callbackSuccessUpdate = function(newAttributes){
+        const selected = thisObject.tempData.filter(d => d.id == newAttributes.id)[0];
+
+        thisObject.tempData = thisObject.tempData.map(d => {
+          if(d.id == selected.id) {
+            return {...d, ...newAttributes}
+          }
+          
+          return d;
+        })
+        $('[data-toggle="tooltip"]').tooltip('hide');
+        thisObject.showActivitiesData(thisObject.tempData);
+        $('.activity-media').hide();
+        $('.activity-input-container').hide();
+        $('.activity-target-container').hide();
+        $('.activity-edit-container').show();
+        $('.btn-add-value').addClass('btn-mw')
+      }
+      
       $("body").on("click", "#btn-update-activity", (evt) =>
         formView.handleClickUpdateButton({
-          callbackSuccess: function(newAttributes){
-            const selected = thisObject.tempData.filter(d => d.id == newAttributes.id)[0];
-
-            thisObject.tempData = thisObject.tempData.map(d => {
-              if(d.id == selected.id) {
-                return {...d, ...newAttributes}
-              }
-              
-              return d;
-            })
-            $('[data-toggle="tooltip"]').tooltip('hide');
-            thisObject.showActivitiesData(thisObject.tempData);
-            $('.activity-media').hide();
-            $('.activity-input-container').hide();
-            $('.activity-target-container').hide();
-            $('.activity-edit-container').show();
-            $('.btn-add-value').addClass('btn-mw')
-          }
+          callbackSuccess: callbackSuccessUpdate
         })
       );
+
+      $("#form_submit_btn_top").off().on("click", () => formView.handleClickSubmitButton('#activity_top_area', {
+        disableLoading: true,
+        callbackSuccess: () => {
+            $("#modalAddActivity").modal("hide");
+            thisObject.fetchActivities();
+        }
+    }));
+
+
 
       // $('#float-wrapper').sortable({
       //     containerSelector: 'div.draggable',
@@ -1020,22 +1036,25 @@ class HomeView {
         
         $(this).val(value.substring(0, 2));
       })
+
+      
+      // get report
+      $('body').on('click', '.activity-target-container', function(e){
+        thisObject.fetchDetailReport(this);
+      });
+
+      $('body').on('change', '#switchStatus', function() {
+        const checked = $(this).prop('checked');
+        const label = checked ? 'Active' : 'Inactive';
+
+        $(this).closest('.custom-switch').find('label').html(label);
+
+        // update to db
+        formView.handleClickUpdateButton({
+          callbackSuccess: callbackSuccessUpdate
+        })
+      })
     })
-
-    // $('body').on('click', '.activity-target-container', function(event) {
-    //   const dateObject = new Date();
-    //   const currentMonth = dateObject.getMonth() + 1;
-    //   const currentYear = dateObject.getFullYear();
-    //   const activityid = $(this).closest('.row-activity').attr('activityid');
-
-    //   const link = `/report/list.html?year=${currentYear}&month=${currentMonth}&tab=month&activityid=${activityid}`;
-    //   window.location.replace(link);
-    // })
-
-    // get report
-    $('body').on('click', '.activity-target-container', function(e){
-      thisObject.fetchDetailReport(this);
-    });
   }
 }
 

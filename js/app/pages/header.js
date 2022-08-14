@@ -96,12 +96,14 @@ class HeaderView {
 
         const formView = new FormView();
         formView.changeTypeListener('#activity_top_area');
-        $("#form_submit_btn_top").on("click", () => formView.handleClickSubmitButton('#activity_top_area', {
-            disableLoading: true,
-            callbackSuccess: () => {
-                $("#modalAddActivity").modal("hide");
-            }
-        }));
+        if(window.location.pathname !== '/index.html') {
+            $("#form_submit_btn_top").on("click", () => formView.handleClickSubmitButton('#activity_top_area', {
+                disableLoading: true,
+                callbackSuccess: () => {
+                    $("#modalAddActivity").modal("hide");
+                }
+            }));
+        }
     // $("body").on("change", "#form_is_use_textfield", (evt) =>
         //     this.handleChangeUseTextfield(evt.target.checked)
         // );
